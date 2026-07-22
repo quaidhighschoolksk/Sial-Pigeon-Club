@@ -1337,6 +1337,42 @@
   });
 
   // CLUBS admin list
+  // Turns "HH:MM" (or plain minutes) into a total minute count. Bad/empty
+  // values count as 0 so one blank pigeon time doesn't break an owner's total.
+  function parseTimeToMinutes(str){
+    if (!str) return 0;
+    const parts = String(str).trim().split(':').map(n => parseInt(n, 10));
+    if (parts.some(isNaN)) return 0;
+    if (parts.length === 2) return parts[0] * 60 + parts[1];
+    return parts[0] || 0;
+  }
+  // Turns a total minute count back into "H:MM" for display.
+  function formatMinutesToTime(mins){
+    const h = Math.floor(mins / 60), m = mins % 60;
+    return `${h}:${String(m).padStart(2, '0')}`;
+  }
+  // Escapes a value so it's safe to drop inside an HTML attribute.
+  function escapeAttr(str){
+    return String(str ?? '').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');
+  }
+  // Groups a tournament's raw pigeon-time entries into one block per owner,
+  // so admin only ever types the owner name once and just adds times under it.
+  // Entries with no owner name yet are kept as their own separate group
+  // (keyed by their own id) so blank rows don't all merge into one bucket.
+  function groupEntriesByOwnerAdmin(entries){
+    const map = new Map();
+    const order = [];
+    entries.forEach(e => {
+      const trimmed = (e.owner || '').trim();
+      const key = trimmed ? 'o:' + trimmed : 'blank:' + e.id;
+      if (!map.has(key)) { map.set(key, { ownerKey:key, owner:trimmed, photoUrl:'', items:[] }); order.push(key); }
+      const g = map.get(key);
+      if (e.photoUrl && !g.photoUrl) g.photoUrl = e.photoUrl;
+      g.items.push(e);
+    });
+    return order.map(k => map.get(k));
+  }
+
   function renderAdminClubs(rows, tournamentsByClub = {}, entriesByTournament = {}){
     const el = document.getElementById('admin-clubs-list');
     if (!el) return;
@@ -1378,29 +1414,45 @@
                     <button class="tourn-delete" style="background:#fde8e8; color:#c0392b; border:none; border-radius:8px; padding:9px 14px; font-weight:600; cursor:pointer; height:38px;">Delete</button>
                   </div>
                 </div>
-                <div class="tourn-stats-row" data-tid="${t.id}" style="display:grid; grid-template-columns:1fr 1fr 1fr 1fr; gap:8px; margin-top:8px;">
+                <div class="tourn-stats-row" data-tid="${t.id}" style="display:grid; grid-template-columns:1fr 1fr 1fr 1fr 1fr; gap:8px; margin-top:8px;">
                   <div class="admin-field"><label>Start Time (same for all pigeons)</label><input data-tk="startTime" type="text" placeholder="e.g. 05:30" value="${t.startTime ?? ''}" style="font-family:'JetBrains Mono',monospace;"></div>
+                  <div class="admin-field"><label>Last Time <span style="font-weight:400; opacity:0.6;">(isse baad time error dega)</span></label><input data-tk="lastTime" type="text" placeholder="e.g. 20:30" value="${t.lastTime ?? ''}" style="font-family:'JetBrains Mono',monospace;"></div>
                   <div class="admin-field"><label>Total Pigeons <span style="font-weight:400; opacity:0.6;">(auto)</span></label><div style="padding:9px 11px; border:1px solid var(--line); border-radius:8px; background:#fff; font-weight:600;">${pigeonsCount}</div></div>
                   <div class="admin-field"><label>Landed <span style="font-weight:400; opacity:0.6;">(auto)</span></label><div style="padding:9px 11px; border:1px solid var(--line); border-radius:8px; background:#fff; font-weight:600;">${landedCount}</div></div>
                   <div class="admin-field"><label>Lofts <span style="font-weight:400; opacity:0.6;">(auto, per owner)</span></label><div style="padding:9px 11px; border:1px solid var(--line); border-radius:8px; background:#fff; font-weight:600;">${loftsCount}</div></div>
                 </div>
 
                 <div style="margin-top:12px; padding-top:10px; border-top:1px dashed var(--line);">
-                  <label style="font-size:0.7rem; font-weight:600; color:var(--ink-sky); opacity:0.7; display:block; margin-bottom:8px;">Pigeon Times — Owner Name + Time</label>
-                  <div class="entry-admin-list" data-tournament-id="${t.id}" data-club-id="${c.id}" style="display:flex; flex-direction:column; gap:8px;">
-                    ${entries.map(e => `
-                      <div class="entry-row" data-eid="${e.id}" style="display:grid; grid-template-columns:2fr 1fr auto; gap:8px; align-items:end;">
-                        <div class="admin-field"><label>Owner Name</label><input data-ek="owner" type="text" dir="rtl" value="${e.owner ?? ''}"></div>
-                        <div class="admin-field"><label>Pigeon Time</label><input data-ek="time" type="text" placeholder="00:00" value="${e.time ?? ''}" style="font-family:'JetBrains Mono',monospace;"></div>
-                        <div style="display:flex; gap:6px;">
-                          <button class="entry-save" style="background:var(--loft-green); color:#fff; border:none; border-radius:8px; padding:9px 14px; font-weight:600; cursor:pointer; height:38px;">Save</button>
-                          <button class="entry-delete" style="background:#fde8e8; color:#c0392b; border:none; border-radius:8px; padding:9px 14px; font-weight:600; cursor:pointer; height:38px;">Delete</button>
+                  <label style="font-size:0.7rem; font-weight:600; color:var(--ink-sky); opacity:0.7; display:block; margin-bottom:8px;">Owners &amp; Pigeon Times — owner name ek dafa, neeche sirf times add karein</label>
+                  <div class="owner-admin-list" data-tournament-id="${t.id}" data-club-id="${c.id}" style="display:flex; flex-direction:column; gap:12px;">
+                    ${groupEntriesByOwnerAdmin(entries).map(g => {
+                      const totalMins = g.items.reduce((sum, e) => sum + parseTimeToMinutes(e.time), 0);
+                      const totalStr = formatMinutesToTime(totalMins);
+                      return `
+                      <div class="owner-admin-block" data-owner-key="${escapeAttr(g.ownerKey)}" style="border:1px solid var(--line); border-radius:10px; padding:12px; background:#fff;">
+                        <div class="owner-admin-head" style="display:grid; grid-template-columns:2fr 2fr 1fr auto; gap:8px; align-items:end;">
+                          <div class="admin-field"><label>Owner Name</label><input class="owner-name-input" type="text" dir="rtl" value="${escapeAttr(g.owner)}"></div>
+                          <div class="admin-field"><label>Owner Photo URL</label><input class="owner-photo-input" type="text" placeholder="https://..." value="${escapeAttr(g.photoUrl)}"></div>
+                          <div class="admin-field"><label>Total Time <span style="font-weight:400; opacity:0.6;">(auto)</span></label><div class="owner-total-time" style="padding:9px 11px; border:1px solid var(--line); border-radius:8px; background:var(--feather-cream); font-weight:700; font-family:'JetBrains Mono',monospace;">${totalStr}</div></div>
+                          <div style="display:flex; gap:6px;">
+                            <button class="owner-save" style="background:var(--loft-green); color:#fff; border:none; border-radius:8px; padding:9px 14px; font-weight:600; cursor:pointer; height:38px;">Save</button>
+                            <button class="owner-delete" style="background:#fde8e8; color:#c0392b; border:none; border-radius:8px; padding:9px 14px; font-weight:600; cursor:pointer; height:38px;">Delete Owner</button>
+                          </div>
                         </div>
-                        <div class="admin-field" style="grid-column:1/4;"><label>Owner Photo URL (same photo repeats for all of this owner's pigeons)</label><input data-ek="photoUrl" type="text" placeholder="https://..." value="${e.photoUrl ?? ''}"></div>
+                        <div class="pigeon-time-list" style="display:flex; flex-direction:column; gap:6px; margin-top:10px;">
+                          ${g.items.map(e => `
+                            <div class="pigeon-time-row" data-eid="${e.id}" style="display:grid; grid-template-columns:1fr auto; gap:8px; align-items:center;">
+                              <input class="pigeon-time-input" type="text" placeholder="00:00" value="${escapeAttr(e.time)}" style="font-family:'JetBrains Mono',monospace; padding:9px 11px; border:1px solid var(--line); border-radius:8px;">
+                              <button class="pigeon-time-delete" title="Delete this pigeon time" style="background:#fde8e8; color:#c0392b; border:none; border-radius:8px; padding:9px 12px; font-weight:600; cursor:pointer; height:38px;">✕</button>
+                            </div>
+                          `).join('')}
+                        </div>
+                        <button class="owner-add-pigeon-btn" data-tournament-id="${t.id}" data-club-id="${c.id}" style="margin-top:10px; background:var(--feather-cream); color:var(--ink-sky); border:1px solid var(--line); padding:7px 14px; border-radius:8px; font-weight:600; font-size:0.78rem; cursor:pointer;">+ Pigeon</button>
                       </div>
-                    `).join('')}
+                    `;
+                    }).join('')}
                   </div>
-                  <button class="entry-add-btn" data-tournament-id="${t.id}" data-club-id="${c.id}" style="margin-top:10px; background:#fff; color:var(--ink-sky); border:1px solid var(--line); padding:8px 16px; border-radius:8px; font-weight:600; font-size:0.8rem; cursor:pointer;">+ Add Pigeon Time</button>
+                  <button class="owner-add-btn" data-tournament-id="${t.id}" data-club-id="${c.id}" style="margin-top:10px; background:#fff; color:var(--ink-sky); border:1px solid var(--line); padding:8px 16px; border-radius:8px; font-weight:600; font-size:0.8rem; cursor:pointer;">+ Add Owner</button>
                 </div>
               </div>
             `;
@@ -1447,15 +1499,14 @@
         });
         // Total Pigeons / Landed / Lofts are auto-computed from this
         // tournament's pigeon-time rows, not typed in.
-        const entryRows = block.querySelectorAll('.entry-row');
+        const pigeonRows = block.querySelectorAll('.pigeon-time-row');
         const ownerNames = new Set();
-        entryRows.forEach(row => {
-          const ownerInput = row.querySelector('[data-ek="owner"]');
-          const owner = ownerInput ? ownerInput.value.trim() : '';
+        block.querySelectorAll('.owner-name-input').forEach(input => {
+          const owner = input.value.trim();
           if (owner) ownerNames.add(owner);
         });
-        data.pigeons = entryRows.length;
-        data.landed = entryRows.length;
+        data.pigeons = pigeonRows.length;
+        data.landed = pigeonRows.length;
         data.lofts = ownerNames.size;
         await setDoc(doc(db, 'tournaments', tid), data, { merge: true });
         btn.textContent = 'Saved ✓';
@@ -1494,38 +1545,99 @@
       });
     });
 
-    // Pigeon entry: save
-    el.querySelectorAll('.entry-save').forEach(btn => {
+    // Owner group: save — pushes the owner name/photo (typed once) plus every
+    // pigeon time under it out to their own tournamentEntries docs.
+    el.querySelectorAll('.owner-save').forEach(btn => {
       btn.addEventListener('click', async () => {
-        const row = btn.closest('.entry-row');
-        const eid = row.dataset.eid;
-        const list = row.closest('.entry-admin-list');
-        const data = { tournamentId: list.dataset.tournamentId, clubId: list.dataset.clubId };
-        row.querySelectorAll('[data-ek]').forEach(input => {
-          data[input.getAttribute('data-ek')] = input.value;
-        });
-        await setDoc(doc(db, 'tournamentEntries', eid), data, { merge: true });
+        const block = btn.closest('.owner-admin-block');
+        const list = block.closest('.owner-admin-list');
+        const tournBlock = block.closest('.tourn-admin-block');
+        const tournamentId = list.dataset.tournamentId;
+        const clubId = list.dataset.clubId;
+        const owner = block.querySelector('.owner-name-input').value;
+        const photoUrl = block.querySelector('.owner-photo-input').value;
+        const rows = block.querySelectorAll('.pigeon-time-row');
+
+        // Guard: a pigeon time can't land after this tournament's Last Time.
+        const lastTimeInput = tournBlock ? tournBlock.querySelector('[data-tk="lastTime"]') : null;
+        const lastTime = lastTimeInput ? lastTimeInput.value.trim() : '';
+        if (lastTime) {
+          const lastMins = parseTimeToMinutes(lastTime);
+          for (const row of rows) {
+            const timeInput = row.querySelector('.pigeon-time-input');
+            const time = timeInput.value.trim();
+            timeInput.style.borderColor = '';
+            if (time && parseTimeToMinutes(time) > lastMins) {
+              timeInput.style.borderColor = '#c0392b';
+              alert(`Pigeon time ${time} is tournament ke Last Time (${lastTime}) ke baad hai. Pehle time theek karein, phir Save karein.`);
+              return;
+            }
+          }
+        }
+
+        await Promise.all(Array.from(rows).map(row => {
+          const eid = row.dataset.eid;
+          const time = row.querySelector('.pigeon-time-input').value;
+          return setDoc(doc(db, 'tournamentEntries', eid), { tournamentId, clubId, owner, photoUrl, time }, { merge: true });
+        }));
         btn.textContent = 'Saved ✓';
         setTimeout(() => btn.textContent = 'Save', 1800);
       });
     });
-    // Pigeon entry: delete
-    el.querySelectorAll('.entry-delete').forEach(btn => {
+    // Owner group: delete — removes this owner and every pigeon time under them.
+    el.querySelectorAll('.owner-delete').forEach(btn => {
       btn.addEventListener('click', async () => {
-        const row = btn.closest('.entry-row');
+        const block = btn.closest('.owner-admin-block');
+        const rows = block.querySelectorAll('.pigeon-time-row');
+        if (confirm('Ye owner aur is ke sab pigeon times delete karne hain?')) {
+          await Promise.all(Array.from(rows).map(row => deleteDoc(doc(db, 'tournamentEntries', row.dataset.eid))));
+        }
+      });
+    });
+    // Single pigeon time: delete just that one row from its owner's list.
+    el.querySelectorAll('.pigeon-time-delete').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        const row = btn.closest('.pigeon-time-row');
         if (confirm('Ye pigeon time delete karna hai?')) {
           await deleteDoc(doc(db, 'tournamentEntries', row.dataset.eid));
         }
       });
     });
-    // Pigeon entry: add new
-    el.querySelectorAll('.entry-add-btn').forEach(btn => {
+    // Owner group: add another pigeon time under the same owner — owner name
+    // and photo carry over automatically, no retyping needed.
+    el.querySelectorAll('.owner-add-pigeon-btn').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        const block = btn.closest('.owner-admin-block');
+        const tournamentId = btn.dataset.tournamentId;
+        const clubId = btn.dataset.clubId;
+        const owner = block.querySelector('.owner-name-input').value;
+        const photoUrl = block.querySelector('.owner-photo-input').value;
+        const newId = 'e_' + tournamentId + '_' + Date.now();
+        await setDoc(doc(db, 'tournamentEntries', newId), {
+          tournamentId, clubId, owner, photoUrl, time: ''
+        });
+      });
+    });
+    // Live feedback: flag a pigeon time red the moment it's typed past the
+    // tournament's Last Time, so admin sees the problem before hitting Save.
+    el.querySelectorAll('.pigeon-time-input').forEach(input => {
+      input.addEventListener('blur', () => {
+        const tournBlock = input.closest('.tourn-admin-block');
+        const lastTimeInput = tournBlock ? tournBlock.querySelector('[data-tk="lastTime"]') : null;
+        const lastTime = lastTimeInput ? lastTimeInput.value.trim() : '';
+        const time = input.value.trim();
+        input.style.borderColor = (lastTime && time && parseTimeToMinutes(time) > parseTimeToMinutes(lastTime))
+          ? '#c0392b' : '';
+      });
+    });
+    // Tournament: add a brand-new owner (first pigeon time blank, ready to fill in).
+    el.querySelectorAll('.owner-add-btn').forEach(btn => {
       btn.addEventListener('click', async () => {
         const tournamentId = btn.dataset.tournamentId;
         const clubId = btn.dataset.clubId;
         const newId = 'e_' + tournamentId + '_' + Date.now();
         await setDoc(doc(db, 'tournamentEntries', newId), {
-          tournamentId, clubId, owner: 'نیا اندراج', time: '00:00', photoUrl: ''
+          tournamentId, clubId, owner: 'نیا مالک', time: '', photoUrl: ''
         });
       });
     });
