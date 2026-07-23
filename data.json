@@ -1,0 +1,27 @@
+{
+  "meta": {
+    "t_name": "Sohni Dharti Cup 2026",
+    "t_code": "Tournament T-266 · In progress",
+    "t_club": "Sohni Dharti Pigeon Club, Kharian",
+    "t_dates": "13 Jun – 20 Jun 2026",
+    "t_start": "05:30 AM",
+    "t_birds": "42",
+    "t_fee": "Rs. 5,000 / bird",
+    "t_day": "Day 6 of 8",
+    "t_desc": "High-flying endurance tournament hosted by Sohni Dharti Pigeon Club, Kharian. Flight timers run daily from release until the last bird lands; standings below are cumulative across all flight days."
+  },
+  "columns": ["13.06", "14.06", "15.06", "16.06", "17.06"],
+  "birds": [
+    { "ring": "PK-0417", "owner": "M. Aslam", "times": ["12h 40m", "13h 05m", "12h 55m", "11h 48m", "11h 50m"], "total": "62h 18m" },
+    { "ring": "PK-1182", "owner": "Rana Waseem", "times": ["12h 10m", "12h 50m", "12h 40m", "11h 55m", "11h 30m"], "total": "61h 05m" },
+    { "ring": "PK-0093", "owner": "Sheikh Kashif", "times": ["11h 58m", "12h 20m", "12h 12m", "11h 40m", "11h 20m"], "total": "59h 30m" },
+    { "ring": "PK-0755", "owner": "Umar Bajwa", "times": ["11h 30m", "12h 05m", "11h 50m", "11h 20m", "11h 15m"], "total": "58h 00m" },
+    { "ring": "PK-0342", "owner": "Teja Dakku", "times": ["11h 20m", "11h 45m", "11h 30m", "11h 05m", "10h 55m"], "total": "56h 35m" },
+    { "ring": "PK-1046", "owner": "Sukhdev Singh", "times": ["11h 05m", "11h 20m", "11h 10m", "10h 50m", "10h 40m"], "total": "55h 05m" }
+  ],
+  "tournaments": [
+    { "date": "05.06 – 12.06", "title": "Wasda Punjab Champion Trophy", "sub": "Itfaq Pigeon Club, Tehsil Kharian", "status": "live" },
+    { "date": "21.06 – 28.06", "title": "Al-Falah Endurance Cup", "sub": "Al-Falah Pigeon Club, Gujranwala", "status": "soon" },
+    { "date": "16.04 – 16.04", "title": "Sheran Ka Dangal", "sub": "South Africa Chapter", "status": "done" }
+  ]
+}
