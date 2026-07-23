@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sohni Dharti Cup 2026 — Tournament Results</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+
+  :root{
+    --bg: #10142A;
+    --bg-panel: #171D3A;
+    --bg-panel-2: #1D2547;
+    --line: #2B3364;
+    --gold: #D7AE55;
+    --gold-soft: #C8994A;
+    --teal: #5FA8A0;
+    --text: #ECE9DF;
+    --text-dim: #9AA1C4;
+    --text-faint: #6A7099;
+    --up: #6FBF8B;
+    --down: #D97C7C;
+    --radius: 10px;
+  }
+
+  *{ box-sizing: border-box; }
+  html{ scroll-behavior: smooth; }
+  body{
+    margin: 0;
+    background: var(--bg);
+    background-image:
+      radial-gradient(ellipse 900px 500px at 15% -10%, rgba(215,174,85,0.08), transparent 60%),
+      radial-gradient(ellipse 700px 500px at 100% 0%, rgba(95,168,160,0.07), transparent 55%);
+    color: var(--text);
+    font-family: 'IBM Plex Sans', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  a{ color: inherit; }
+
+  .wrap{ max-width: 1080px; margin: 0 auto; padding: 0 24px; }
+
+  /* ---------- Top bar ---------- */
+  .topbar{
+    border-bottom: 1px solid var(--line);
+    background: rgba(16,20,42,0.85);
+    position: sticky; top: 0; z-index: 20;
+    backdrop-filter: blur(8px);
+  }
+  .topbar .wrap{
+    display:flex; align-items:center; justify-content: space-between;
+    padding-top: 14px; padding-bottom: 14px;
+  }
+  .brand{ display:flex; align-items:center; gap:10px; font-family:'Fraunces', serif; font-weight:600; font-size: 19px; letter-spacing: 0.2px;}
+  .brand .ring{
+    width: 26px; height: 26px; border-radius: 50%;
+    border: 3px solid var(--gold);
+    position: relative;
+  }
+  .brand .ring::after{
+    content:""; position:absolute; inset: 4px; border-radius:50%;
+    border: 1px solid rgba(215,174,85,0.5);
+  }
+  nav{ display:flex; gap: 26px; font-size: 14px; color: var(--text-dim); }
+  nav a{ text-decoration:none; transition: color .15s ease; }
+  nav a:hover, nav a.active{ color: var(--gold); }
+
+  /* ---------- Hero / tournament header ---------- */
+  .hero{ padding: 44px 0 28px; border-bottom: 1px solid var(--line); }
+  .eyebrow{
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 12px; letter-spacing: 2px; text-transform: uppercase;
+    color: var(--teal); margin-bottom: 14px; display:flex; align-items:center; gap:10px;
+  }
+  .eyebrow .dot{ width:7px; height:7px; border-radius:50%; background: var(--up); box-shadow: 0 0 0 4px rgba(111,191,139,0.15); animation: pulse 2s infinite; }
+  @keyframes pulse{ 0%,100%{ opacity:1 } 50%{ opacity:.35 } }
+
+  h1.title{
+    font-family: 'Fraunces', serif; font-weight: 700;
+    font-size: clamp(30px, 5vw, 46px); line-height: 1.05; margin: 0 0 10px;
+  }
+  .subtitle{ color: var(--text-dim); font-size: 15px; margin: 0 0 26px; max-width: 60ch; }
+
+  .hero-grid{
+    display:grid; grid-template-columns: 1.3fr 1fr; gap: 20px;
+  }
+  @media (max-width: 760px){ .hero-grid{ grid-template-columns: 1fr; } }
+
+  .meta-card{
+    background: var(--bg-panel);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 18px 20px;
+  }
+  .meta-row{ display:flex; justify-content: space-between; padding: 9px 0; border-bottom: 1px dashed var(--line); font-size: 13.5px; }
+  .meta-row:last-child{ border-bottom: none; }
+  .meta-row span:first-child{ color: var(--text-faint); }
+  .meta-row span:last-child{ color: var(--text); font-weight: 500; text-align:right; }
+
+  /* Signature element: the flight clock */
+  .clock-card{
+    background: linear-gradient(160deg, var(--bg-panel-2), var(--bg-panel));
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 20px 22px;
+    display:flex; flex-direction: column; justify-content: center; align-items:center; text-align:center;
+    position: relative; overflow:hidden;
+  }
+  .clock-card::before{
+    content:"LEADING FLIGHT TIME";
+    font-family:'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 1.5px;
+    color: var(--text-faint); margin-bottom: 6px;
+  }
+  .clock-digits{
+    font-family:'IBM Plex Mono', monospace; font-weight: 600;
+    font-size: clamp(34px, 6vw, 52px);
+    color: var(--gold);
+    letter-spacing: 1px;
+    text-shadow: 0 0 24px rgba(215,174,85,0.25);
+  }
+  .clock-unit{ font-size: 0.4em; color: var(--text-dim); letter-spacing: 1px; margin: 0 3px;}
+  .clock-holder{ margin-top: 8px; font-size: 13px; color: var(--text-dim); }
+  .clock-holder b{ color: var(--text); font-weight: 600; }
+
+  /* ---------- Section headers ---------- */
+  .section{ padding: 40px 0; }
+  .section-head{ display:flex; align-items: baseline; justify-content: space-between; margin-bottom: 18px; flex-wrap: wrap; gap: 10px;}
+  .section-head h2{ font-family:'Fraunces', serif; font-size: 22px; margin:0; font-weight: 600;}
+  .section-head .hint{ font-size: 13px; color: var(--text-faint); }
+
+  /* ---------- Results table ---------- */
+  .table-scroll{ overflow-x: auto; border: 1px solid var(--line); border-radius: var(--radius); }
+  table{ border-collapse: collapse; width: 100%; min-width: 720px; font-size: 13.5px; }
+  thead th{
+    text-align: left; font-weight: 500; color: var(--text-faint);
+    font-family:'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 1px; text-transform: uppercase;
+    background: var(--bg-panel-2);
+    padding: 12px 14px; border-bottom: 1px solid var(--line); white-space: nowrap;
+  }
+  thead th.num, td.num{ text-align: right; font-family:'IBM Plex Mono', monospace; }
+  tbody td{ padding: 12px 14px; border-bottom: 1px solid var(--line); background: var(--bg-panel); white-space: nowrap; }
+  tbody tr:last-child td{ border-bottom: none; }
+  tbody tr:hover td{ background: #202a4d; }
+  tbody tr.leader td{ background: rgba(215,174,85,0.08); }
+  tbody tr.leader:hover td{ background: rgba(215,174,85,0.14); }
+
+  .rank-badge{
+    display:inline-flex; align-items:center; justify-content:center;
+    width: 30px; height: 30px; border-radius: 50%;
+    border: 2px solid var(--line);
+    font-family:'IBM Plex Mono', monospace; font-weight: 600; font-size: 12px;
+    color: var(--text-dim);
+  }
+  tr.leader .rank-badge{ border-color: var(--gold); color: var(--gold); }
+  tr:nth-child(2) .rank-badge{ border-color: var(--teal); color: var(--teal); }
+
+  .owner{ font-weight: 500; }
+  .ring-no{ color: var(--text-faint); font-family:'IBM Plex Mono', monospace; font-size: 12px; }
+  .total-time{ font-weight: 600; color: var(--text); }
+  tr.leader .total-time{ color: var(--gold); }
+
+  /* ---------- Tournament list ---------- */
+  .list{ display:flex; flex-direction:column; gap: 10px; }
+  .list-item{
+    display:grid; grid-template-columns: 90px 1fr auto; align-items:center; gap: 16px;
+    background: var(--bg-panel); border: 1px solid var(--line); border-radius: var(--radius);
+    padding: 14px 18px; text-decoration: none; transition: border-color .15s ease, transform .1s ease;
+  }
+  .list-item:hover{ border-color: var(--gold-soft); }
+  @media (max-width: 620px){ .list-item{ grid-template-columns: 1fr; gap: 6px; } .list-item .status{ justify-self:start; } }
+  .list-date{ font-family:'IBM Plex Mono', monospace; font-size: 12px; color: var(--text-dim); }
+  .list-title{ font-weight: 600; font-size: 14.5px; }
+  .list-sub{ font-size: 12.5px; color: var(--text-faint); margin-top: 2px; }
+  .status{ font-family:'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 1px; padding: 5px 10px; border-radius: 20px; text-transform: uppercase; white-space:nowrap; }
+  .status.live{ color: var(--up); border: 1px solid rgba(111,191,139,0.4); }
+  .status.done{ color: var(--text-faint); border: 1px solid var(--line); }
+  .status.soon{ color: var(--teal); border: 1px solid rgba(95,168,160,0.4); }
+
+  footer{ border-top: 1px solid var(--line); padding: 28px 0 40px; color: var(--text-faint); font-size: 12.5px; display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px;}
+
+  ::selection{ background: rgba(215,174,85,0.3); }
+</style>
+</head>
+<body>
+
+  <div class="topbar">
+    <div class="wrap">
+      <div class="brand"><span class="ring"></span> Sohni Dharti Pigeon Club</div>
+      <nav>
+        <a href="#" class="active">Results</a>
+        <a href="#">Live</a>
+        <a href="#">Tournaments</a>
+        <a href="#">Clubs</a>
+      </nav>
+    </div>
+  </div>
+
+  <div class="wrap">
+
+    <div class="hero">
+      <div class="eyebrow"><span class="dot"></span> Tournament T-266 · In progress</div>
+      <h1 class="title">Sohni Dharti Cup 2026</h1>
+      <p class="subtitle">High-flying endurance tournament hosted by Sohni Dharti Pigeon Club, Kharian. Flight timers run daily from release until the last bird lands; standings below are cumulative across all flight days.</p>
+
+      <div class="hero-grid">
+        <div class="meta-card">
+          <div class="meta-row"><span>Club</span><span>Sohni Dharti Pigeon Club, Kharian</span></div>
+          <div class="meta-row"><span>Tournament dates</span><span>13 Jun – 20 Jun 2026</span></div>
+          <div class="meta-row"><span>Daily start time</span><span>05:30 AM</span></div>
+          <div class="meta-row"><span>Birds entered</span><span>42</span></div>
+          <div class="meta-row"><span>Entry fee</span><span>Rs. 5,000 / bird</span></div>
+        </div>
+        <div class="clock-card">
+          <div class="clock-digits">62<span class="clock-unit">h</span>18<span class="clock-unit">m</span></div>
+          <div class="clock-holder">held by <b>Ring PK-0417 · M. Aslam</b></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section" id="results">
+      <div class="section-head">
+        <h2>Standings — Day 6 of 8</h2>
+        <div class="hint">Updated 13 Jun 2026, 09:12 AM</div>
+      </div>
+
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th>Rank</th>
+              <th>Ring No.</th>
+              <th>Owner</th>
+              <th class="num">13.06</th>
+              <th class="num">14.06</th>
+              <th class="num">15.06</th>
+              <th class="num">16.06</th>
+              <th class="num">17.06</th>
+              <th class="num">Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="leader">
+              <td><span class="rank-badge">1</span></td>
+              <td class="ring-no">PK-0417</td>
+              <td class="owner">M. Aslam</td>
+              <td class="num">12h 40m</td>
+              <td class="num">13h 05m</td>
+              <td class="num">12h 55m</td>
+              <td class="num">11h 48m</td>
+              <td class="num">11h 50m</td>
+              <td class="num total-time">62h 18m</td>
+            </tr>
+            <tr>
+              <td><span class="rank-badge">2</span></td>
+              <td class="ring-no">PK-1182</td>
+              <td class="owner">Rana Waseem</td>
+              <td class="num">12h 10m</td>
+              <td class="num">12h 50m</td>
+              <td class="num">12h 40m</td>
+              <td class="num">11h 55m</td>
+              <td class="num">11h 30m</td>
+              <td class="num total-time">61h 05m</td>
+            </tr>
+            <tr>
+              <td><span class="rank-badge">3</span></td>
+              <td class="ring-no">PK-0093</td>
+              <td class="owner">Sheikh Kashif</td>
+              <td class="num">11h 58m</td>
+              <td class="num">12h 20m</td>
+              <td class="num">12h 12m</td>
+              <td class="num">11h 40m</td>
+              <td class="num">11h 20m</td>
+              <td class="num total-time">59h 30m</td>
+            </tr>
+            <tr>
+              <td><span class="rank-badge">4</span></td>
+              <td class="ring-no">PK-0755</td>
+              <td class="owner">Umar Bajwa</td>
+              <td class="num">11h 30m</td>
+              <td class="num">12h 05m</td>
+              <td class="num">11h 50m</td>
+              <td class="num">11h 20m</td>
+              <td class="num">11h 15m</td>
+              <td class="num total-time">58h 00m</td>
+            </tr>
+            <tr>
+              <td><span class="rank-badge">5</span></td>
+              <td class="ring-no">PK-0342</td>
+              <td class="owner">Teja Dakku</td>
+              <td class="num">11h 20m</td>
+              <td class="num">11h 45m</td>
+              <td class="num">11h 30m</td>
+              <td class="num">11h 05m</td>
+              <td class="num">10h 55m</td>
+              <td class="num total-time">56h 35m</td>
+            </tr>
+            <tr>
+              <td><span class="rank-badge">6</span></td>
+              <td class="ring-no">PK-1046</td>
+              <td class="owner">Sukhdev Singh</td>
+              <td class="num">11h 05m</td>
+              <td class="num">11h 20m</td>
+              <td class="num">11h 10m</td>
+              <td class="num">10h 50m</td>
+              <td class="num">10h 40m</td>
+              <td class="num total-time">55h 05m</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="section" id="tournaments">
+      <div class="section-head">
+        <h2>Other tournaments</h2>
+        <div class="hint">Across all member clubs</div>
+      </div>
+      <div class="list">
+        <a class="list-item" href="#">
+          <div class="list-date">05.06 – 12.06</div>
+          <div>
+            <div class="list-title">Wasda Punjab Champion Trophy</div>
+            <div class="list-sub">Itfaq Pigeon Club, Tehsil Kharian</div>
+          </div>
+          <div class="status live">Live</div>
+        </a>
+        <a class="list-item" href="#">
+          <div class="list-date">21.06 – 28.06</div>
+          <div>
+            <div class="list-title">Al-Falah Endurance Cup</div>
+            <div class="list-sub">Al-Falah Pigeon Club, Gujranwala</div>
+          </div>
+          <div class="status soon">Upcoming</div>
+        </a>
+        <a class="list-item" href="#">
+          <div class="list-date">16.04 – 16.04</div>
+          <div>
+            <div class="list-title">Sheran Ka Dangal</div>
+            <div class="list-sub">South Africa Chapter</div>
+          </div>
+          <div class="status done">Completed</div>
+        </a>
+      </div>
+    </div>
+
+  </div>
+
+  <footer>
+    <div class="wrap" style="display:flex; justify-content:space-between; width:100%; flex-wrap:wrap; gap:10px;">
+      <span>Sample tournament results template — swap in your own club, dates and standings.</span>
+      <span>Built for demonstration purposes.</span>
+    </div>
+  </footer>
+
+</body>
+</html>
