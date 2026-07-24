@@ -1,48 +1,28 @@
 {
   "meta": {
-    "club_name": "Sohni Dharti Pigeon Club",
-    "date": "13 Jun 2026",
-    "uraan_time": "05:00",
+    "club_name": "Sial Pigeon Club",
+    "date": "14 August 2026",
+    "uraan_time": "06:00",
     "aakhri_time": "20:30",
     "sunrise": "04:55",
     "sunset": "19:41",
-    "flying": 21,
-    "landed": 111,
-    "pigeons": 132,
-    "lofts": 12,
-    "first_winner_time": "14:14",
-    "first_winner_name": "استاد گلنواز",
-    "winner_pigeon_time": "20:01",
-    "winner_pigeon_name": "پیر فواد عظیم"
+    "flying": 0,
+    "landed": 0,
+    "pigeons": 0,
+    "lofts": 0,
+    "first_winner_time": "15:55",
+    "first_winner_name": "Ustad Haji Nawaz",
+    "winner_pigeon_time": "20:05",
+    "winner_pigeon_name": "Ustad amir Kharl"
   },
-  "columns": ["#6", "#5", "#4", "#3", "#2", "#1"],
-  "birds": [
-    {
-      "name": "پیر فواد عظیم امرا",
-      "image": "",
-      "total": "128:55",
-      "status": "landed",
-      "deduction": "",
-      "note": "",
-      "times": ["09:46", "17:32", "17:19", "16:42", "13:57", "13:56"]
-    },
-    {
-      "name": "احسان جٹ دہم",
-      "image": "",
-      "total": "122:55",
-      "status": "landed",
-      "deduction": "-06:00",
-      "note": "کبوتر صبح 5:01 پر آرائے تھے",
-      "times": ["05:00", "16:00", "15:01", "14:57", "14:03", "12:28"]
-    },
-    {
-      "name": "رانا وسیم",
-      "image": "",
-      "total": "118:40",
-      "status": "landed",
-      "deduction": "",
-      "note": "",
-      "times": ["10:20", "17:10", "16:55", "16:20", "13:40", "13:20"]
-    }
-  ]
+  "columns": [
+    "#1",
+    "#2",
+    "#3",
+    "#4",
+    "#5",
+    "#6",
+    "#7"
+  ],
+  "birds": []
 }
