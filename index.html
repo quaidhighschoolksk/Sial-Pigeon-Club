@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="ur">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tournament Results</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu:wght@400;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap');
+
+  :root{
+    --green: #4C7A5E;
+    --green-dark: #3C6249;
+    --bg: #F5F7F5;
+    --card: #FFFFFF;
+    --entry-bg: #EAF5EC;
+    --gold: #F0A93A;
+    --gold-bg: #FFF6E4;
+    --cyan: #6FD8E8;
+    --cyan-bg: #E4FBFE;
+    --text: #1E2622;
+    --text-dim: #5C6B62;
+    --line: #E2E8E3;
+    --danger: #D64545;
+    --silver: #B9BFBB;
+    --radius: 14px;
+  }
+  *{ box-sizing: border-box; }
+  body{
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'IBM Plex Sans', system-ui, sans-serif;
+  }
+  .urdu{ font-family: 'Noto Nastaliq Urdu', serif; direction: rtl; unicode-bidi: embed; line-height: 1.9; }
+
+  .wrap{ max-width: 480px; margin: 0 auto; padding: 14px 14px 60px; }
+
+  /* Info bar */
+  .infobar{
+    background: linear-gradient(160deg, var(--green), var(--green-dark));
+    color: #fff; border-radius: var(--radius);
+    padding: 14px 16px; font-size: 14px; line-height: 1.7;
+    margin-bottom: 14px;
+  }
+  .infobar .line1{ font-weight: 600; }
+  .infobar .line2{ opacity: 0.92; }
+
+  .dl-btn{
+    display:flex; align-items:center; justify-content:center; gap: 8px;
+    border: 1.5px solid var(--green); color: var(--green); background: #fff;
+    border-radius: 10px; padding: 10px; font-weight: 600; font-size: 14.5px;
+    margin-bottom: 16px; cursor: pointer; width: 100%;
+  }
+  .dl-btn:hover{ background: var(--entry-bg); }
+
+  /* Stat cards */
+  .stats{ display:grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 12px; }
+  .stat{
+    background: var(--card); border: 1.5px solid var(--line); border-radius: 12px;
+    padding: 10px 4px; text-align:center;
+  }
+  .stat.flying{ border-color: var(--gold); }
+  .stat.landed{ border-color: var(--green); }
+  .stat .num{ font-size: 22px; font-weight: 700; }
+  .stat.flying .num{ color: var(--gold); }
+  .stat.landed .num{ color: var(--green); }
+  .stat .lbl{ font-size: 10.5px; color: var(--text-dim); letter-spacing: 0.5px; margin-top: 2px; }
+
+  .progress{
+    background: var(--gold-bg); border-radius: 20px; height: 34px; position: relative; overflow: hidden;
+    margin-bottom: 16px; display:flex; align-items:center;
+  }
+  .progress .fill{
+    position:absolute; left:0; top:0; bottom:0; background: var(--green);
+    border-radius: 20px; display:flex; align-items:center; justify-content:center;
+    color:#fff; font-size: 12.5px; font-weight: 600;
+  }
+  .progress .flying-lbl{ position:absolute; left: 10px; font-size: 11.5px; font-weight:600; color: #8a6a1f; }
+
+  /* Winner cards */
+  .winners{ display:grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
+  .winner-card{ border-radius: 12px; padding: 14px 10px; text-align:center; }
+  .winner-card.first{ background: var(--gold); }
+  .winner-card.pigeon{ background: var(--cyan); }
+  .winner-card .lbl{ font-size: 11px; font-weight: 700; letter-spacing: 0.5px; color: rgba(0,0,0,0.65); margin-bottom: 4px; }
+  .winner-card .time{ font-size: 26px; font-weight: 700; color: #1a1a1a; }
+  .winner-card .wname{ font-size: 15px; margin-top: 2px; color: #1a1a1a; }
+
+  /* Search */
+  .search{
+    background: var(--card); border: 1px solid var(--line); border-radius: 30px;
+    padding: 11px 18px; margin-bottom: 16px; font-size: 14px; width: 100%;
+    text-align: right;
+  }
+  .search::placeholder{ color: var(--text-dim); }
+
+  /* Entry cards */
+  .entry{
+    background: var(--entry-bg); border-radius: var(--radius); padding: 14px;
+    margin-bottom: 12px;
+  }
+  .entry-top{ display:flex; align-items:center; gap: 10px; margin-bottom: 10px; }
+  .entry-total{ font-size: 24px; font-weight: 700; flex-shrink: 0; }
+  .entry-deduction{ font-size: 12px; color: var(--danger); font-weight: 600; }
+  .entry-name-wrap{ flex: 1; text-align: right; }
+  .entry-name{ font-size: 18px; font-weight: 600; }
+  .entry-note{ font-size: 12px; color: var(--danger); margin-top: 2px; }
+  .avatar-rank{ position: relative; flex-shrink: 0; }
+  .avatar{
+    width: 46px; height: 46px; border-radius: 50%; background: var(--green);
+    color:#fff; display:flex; align-items:center; justify-content:center;
+    font-weight: 700; font-size: 15px; overflow: hidden;
+  }
+  .avatar img{ width:100%; height:100%; object-fit: cover; }
+  .rank-badge{
+    position:absolute; bottom:-4px; right:-4px; width: 22px; height: 22px; border-radius: 50%;
+    display:flex; align-items:center; justify-content:center; font-size: 11px; font-weight: 700;
+    color: #fff; border: 2px solid var(--entry-bg);
+  }
+  .rank-badge.r1{ background: var(--gold); }
+  .rank-badge.r2{ background: var(--silver); }
+  .rank-badge.r3{ background: #C08A5A; }
+  .rank-badge.rn{ background: var(--text-dim); }
+
+  .checkpoints{ display:flex; gap: 6px; overflow-x: auto; padding-bottom: 2px; }
+  .chip{ background: #fff; border-radius: 8px; padding: 6px 8px; text-align:center; min-width: 52px; flex-shrink:0; }
+  .chip .clabel{ font-size: 10px; color: var(--text-dim); }
+  .chip .ctime{ font-size: 13px; font-weight: 600; }
+
+  .loading{ padding: 60px 0; text-align:center; color: var(--text-dim); font-size: 13px; }
+  .error-box{ padding: 16px; border: 1px solid var(--danger); border-radius: 10px; color: var(--danger); font-size: 13px; margin: 20px 0; }
+
+  footer{ text-align:center; padding: 20px 0 0; }
+  footer a{
+    color: var(--green); text-decoration:none; border: 1px solid var(--green);
+    padding: 7px 16px; border-radius: 20px; font-size: 12.5px; font-weight: 600;
+  }
+
+  .card-title{ font-size: 16px; font-weight: 700; color: var(--green-dark); margin-bottom: 8px; text-align:center; }
+  #shareCard{ background: var(--bg); padding: 4px 0 2px; }
+  .card-watermark{ text-align:center; font-size: 10.5px; color: var(--text-dim); margin-top: 6px; }
+  .dl-btn:disabled{ opacity: 0.6; cursor: not-allowed; }
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+</head>
+<body>
+<div class="wrap" id="app">
+  <div class="loading">Loading tournament data…</div>
+</div>
+
+<script>
+function escapeHtml(s){ return (s||'').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+function initials(name){
+  const parts = (name||'').trim().split(/\s+/);
+  return parts.slice(0,2).map(p=>p[0]).join('').toUpperCase();
+}
+
+function rankClass(i){
+  if(i===0) return 'r1';
+  if(i===1) return 'r2';
+  if(i===2) return 'r3';
+  return 'rn';
+}
+
+let ALL_BIRDS = [];
+let COLUMNS = [];
+
+function renderList(filter){
+  const term = (filter||'').trim();
+  const list = document.getElementById('birdList');
+  const filtered = ALL_BIRDS.filter(b => !term || b.name.includes(term));
+  list.innerHTML = filtered.map((b, idx)=>{
+    const realIdx = ALL_BIRDS.indexOf(b);
+    const avatarInner = b.image ? `<img src="${escapeHtml(b.image)}" alt="">` : escapeHtml(initials(b.name));
+    const chips = COLUMNS.map((c,i)=>`<div class="chip"><div class="clabel">${escapeHtml(c)}</div><div class="ctime">${escapeHtml(b.times[i]||'—')}</div></div>`).join('');
+    return `
+      <div class="entry">
+        <div class="entry-top">
+          <div style="flex-shrink:0;">
+            <div class="entry-total">${escapeHtml(b.total)}</div>
+            ${b.deduction ? `<div class="entry-deduction">${escapeHtml(b.deduction)}</div>` : ''}
+          </div>
+          <div class="entry-name-wrap">
+            <div class="entry-name urdu">${escapeHtml(b.name)}</div>
+            ${b.note ? `<div class="entry-note urdu">${escapeHtml(b.note)}</div>` : ''}
+          </div>
+          <div class="avatar-rank">
+            <div class="avatar">${avatarInner}</div>
+            <div class="rank-badge ${rankClass(realIdx)}">${realIdx+1}</div>
+          </div>
+        </div>
+        <div class="checkpoints">${chips}</div>
+      </div>`;
+  }).join('') || '<div class="loading">Koi result nahi mila</div>';
+}
+
+function render(data){
+  const m = data.meta;
+  ALL_BIRDS = data.birds;
+  COLUMNS = data.columns;
+  const total = m.pigeons || (m.flying + m.landed) || 1;
+  const flyingPct = Math.round((m.flying / total) * 100);
+  const landedPct = 100 - flyingPct;
+
+  document.getElementById('app').innerHTML = `
+    <div id="shareCard">
+      <div class="card-title">${escapeHtml(m.club_name || '')}</div>
+      <div class="infobar">
+        <div class="line1">${escapeHtml(m.date)} · Uraan time: ${escapeHtml(m.uraan_time)} · Aakhri time: ${escapeHtml(m.aakhri_time)}</div>
+        <div class="line2">🌅 Sunrise: ${escapeHtml(m.sunrise)} · 🕌 Sunset: ${escapeHtml(m.sunset)}</div>
+      </div>
+
+      <div class="stats">
+        <div class="stat flying"><div class="num">${m.flying}</div><div class="lbl">FLYING</div></div>
+        <div class="stat landed"><div class="num">${m.landed}</div><div class="lbl">LANDED</div></div>
+        <div class="stat"><div class="num">${m.pigeons}</div><div class="lbl">PIGEONS</div></div>
+        <div class="stat"><div class="num">${m.lofts}</div><div class="lbl">LOFTS</div></div>
+      </div>
+
+      <div class="progress">
+        <span class="flying-lbl">flying ${flyingPct}%</span>
+        <div class="fill" style="width:${landedPct}%">landed ${landedPct}%</div>
+      </div>
+
+      <div class="winners">
+        <div class="winner-card first">
+          <div class="lbl">FIRST WINNER</div>
+          <div class="time">${escapeHtml(m.first_winner_time)}</div>
+          <div class="wname urdu">${escapeHtml(m.first_winner_name)}</div>
+        </div>
+        <div class="winner-card pigeon">
+          <div class="lbl">WINNER PIGEON</div>
+          <div class="time">${escapeHtml(m.winner_pigeon_time)}</div>
+          <div class="wname urdu">${escapeHtml(m.winner_pigeon_name)}</div>
+        </div>
+      </div>
+      <div class="card-watermark">${escapeHtml(m.date)} · ${escapeHtml(m.club_name || '')}</div>
+    </div>
+
+    <button class="dl-btn" id="dlBtn" onclick="downloadCard()">Download Results Card 📷</button>
+
+    <input class="search" id="searchBox" placeholder="نام یا شہر تلاش کریں" oninput="renderList(this.value)">
+
+    <div id="birdList"></div>
+
+    <footer><a href="admin.html">⚙ Admin Panel</a></footer>
+  `;
+  renderList('');
+}
+
+function downloadCard(){
+  const btn = document.getElementById('dlBtn');
+  const card = document.getElementById('shareCard');
+  btn.disabled = true;
+  const oldLabel = btn.textContent;
+  btn.textContent = 'Generating…';
+  html2canvas(card, { backgroundColor: '#F5F7F5', scale: 2 }).then(canvas => {
+    const link = document.createElement('a');
+    link.download = 'results-card.png';
+    link.href = canvas.toDataURL('image/png');
+    link.click();
+    btn.disabled = false;
+    btn.textContent = oldLabel;
+  }).catch(()=>{
+    btn.disabled = false;
+    btn.textContent = oldLabel;
+    alert('Card banane mein masla hua, dobara koshish karein.');
+  });
+}
+
+fetch('./data.json?t=' + Date.now(), { cache: 'no-store' })
+  .then(r => { if(!r.ok) throw new Error('data.json not found'); return r.json(); })
+  .then(render)
+  .catch(err => {
+    document.getElementById('app').innerHTML =
+      '<div class="error-box">Couldn\'t load data.json — make sure it\'s uploaded in the same folder as this page. (' + err.message + ')</div>' +
+      '<footer><a href="admin.html">⚙ Admin Panel</a></footer>';
+  });
+</script>
+</body>
+</html>
