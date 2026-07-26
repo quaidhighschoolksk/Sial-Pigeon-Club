@@ -6,9 +6,9 @@
     "aakhri_time": "20:30",
     "sunrise": "04:55",
     "sunset": "19:41",
-    "flying": -104,
-    "landed": 111,
-    "pigeons": 7,
+    "flying": 10,
+    "landed": 4,
+    "pigeons": 14,
     "lofts": 12,
     "first_winner_time": "",
     "first_winner_name": "",
@@ -36,6 +36,22 @@
         "12:55",
         "13:22",
         "14:44",
+        "",
+        "",
+        ""
+      ]
+    },
+    {
+      "name": "نیا کبوتر",
+      "image": "",
+      "total": "0:00",
+      "deduction": "",
+      "note": "",
+      "times": [
+        "",
+        "",
+        "",
+        "",
         "",
         "",
         ""
