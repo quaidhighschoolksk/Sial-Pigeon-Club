@@ -63,44 +63,16 @@
                 ""
               ]
             }
-          ]
-        }
-      ]
-    },
-    {
-      "id": "ms2fbgeoi4agz",
-      "name": "ustad Muneer pigeon club",
-      "tournaments": [
-        {
-          "id": "ms2fbgep7uxzo",
-          "meta": {
-            "date": "",
-            "uraan_time": "05:00",
-            "aakhri_time": "20:30",
-            "sunrise": "",
-            "sunset": "",
-            "flying": 0,
-            "landed": 0,
-            "pigeons": 0,
-            "lofts": 0,
-            "first_winner_time": "",
-            "first_winner_name": "",
-            "winner_pigeon_time": "",
-            "winner_pigeon_name": ""
-          },
-          "columns": [
-            "#1",
-            "#2",
-            "#3"
           ],
-          "birds": []
+          "name": ""
         },
         {
-          "id": "ms2fbo8732hz7",
+          "id": "ms2gqk56kqtg7",
+          "name": "",
           "meta": {
-            "date": "",
-            "uraan_time": "05:00",
-            "aakhri_time": "20:30",
+            "date": "14/August/2026",
+            "uraan_time": "06:00",
+            "aakhri_time": "20:00",
             "sunrise": "",
             "sunset": "",
             "flying": 0,
@@ -115,10 +87,13 @@
           "columns": [
             "#1",
             "#2",
-            "#3"
+            "#3",
+            "#4",
+            "#5",
+            "#6",
+            "#7"
           ],
-          "birds": [],
-          "name": ""
+          "birds": []
         }
       ]
     }
