@@ -1,0 +1,1015 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin — Tournament Results</title>
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+
+  :root{
+    --bg: #10142A; --bg-panel: #171D3A; --bg-panel-2: #1D2547;
+    --line: #2B3364; --gold: #D7AE55; --gold-soft: #C8994A;
+    --teal: #5FA8A0; --text: #ECE9DF; --text-dim: #9AA1C4; --text-faint: #6A7099;
+    --danger: #D97C7C; --up: #6FBF8B; --radius: 10px;
+  }
+  *{ box-sizing: border-box; }
+  body{ margin:0; background: var(--bg); color: var(--text); font-family: 'IBM Plex Sans', system-ui, sans-serif; }
+  .wrap{ max-width: 980px; margin: 0 auto; padding: 28px 20px 100px; }
+  h1{ font-family:'Fraunces', serif; font-size: 26px; margin: 0 0 4px; }
+  .sub{ color: var(--text-faint); font-size: 13.5px; margin: 0 0 24px; }
+
+  .panel{ background: var(--bg-panel); border: 1px solid var(--line); border-radius: var(--radius); padding: 20px; margin-bottom: 20px; }
+  .panel h2{ font-family:'Fraunces', serif; font-size: 17px; margin: 0 0 16px; font-weight:600; color: var(--gold); display:flex; align-items:center; gap:8px; }
+
+  label{ display:block; font-size: 12px; color: var(--text-faint); margin-bottom: 5px; font-family:'IBM Plex Mono', monospace; letter-spacing: .3px; }
+  input, textarea, select{
+    width: 100%; background: var(--bg-panel-2); border: 1px solid var(--line); color: var(--text);
+    border-radius: 6px; padding: 9px 11px; font-size: 13.5px; font-family: inherit; margin-bottom: 14px;
+  }
+  input:dir(rtl), textarea:dir(rtl){ text-align: right; }
+  input:focus, textarea:focus{ outline: none; border-color: var(--gold-soft); }
+
+  .grid2{ display:grid; grid-template-columns: 1fr 1fr; gap: 0 16px; }
+  .grid4{ display:grid; grid-template-columns: repeat(4,1fr); gap: 0 16px; }
+  @media (max-width: 640px){ .grid2, .grid4{ grid-template-columns: 1fr 1fr; } }
+
+  .row-card{ background: var(--bg-panel-2); border: 1px solid var(--line); border-radius: 8px; padding: 14px 14px 2px; margin-bottom: 12px; position: relative; }
+  .row-card .rm{ position:absolute; top: 10px; right: 10px; background: none; border: 1px solid var(--danger); color: var(--danger); border-radius: 6px; font-size: 11px; padding: 4px 9px; cursor:pointer; font-family:'IBM Plex Mono', monospace; }
+  .row-card .rm:hover{ background: rgba(217,124,124,0.12); }
+  .row-fields{ display:grid; grid-template-columns: repeat(3, 1fr); gap: 0 14px; }
+  @media (max-width: 640px){ .row-fields{ grid-template-columns: 1fr 1fr; } }
+  .row-fields-cp{ display:grid; grid-template-columns: repeat(6, 1fr); gap: 0 10px; }
+  @media (max-width: 640px){ .row-fields-cp{ grid-template-columns: repeat(3, 1fr); } }
+
+  .btn{ display:inline-flex; align-items:center; gap: 8px; cursor:pointer; border: none; font-family:'IBM Plex Mono', monospace; font-size: 12.5px; letter-spacing: .5px; padding: 10px 16px; border-radius: 7px; text-transform: uppercase; }
+  .btn-gold{ background: var(--gold); color: #1a1408; font-weight: 600; }
+  .btn-gold:hover{ background: var(--gold-soft); }
+  .btn-ghost{ background: transparent; border: 1px solid var(--line); color: var(--text-dim); }
+  .btn-ghost:hover{ border-color: var(--teal); color: var(--teal); }
+  .btn:disabled{ opacity: 0.5; cursor: not-allowed; }
+
+  .actions{ display:flex; gap: 12px; flex-wrap: wrap; margin-top: 8px; align-items:center; }
+
+  .note{ font-size: 12.5px; color: var(--text-faint); background: var(--bg-panel-2); border: 1px dashed var(--line); border-radius: 8px; padding: 12px 14px; margin-bottom: 20px; line-height: 1.6; }
+  .note b{ color: var(--gold); }
+  .note ol{ margin: 6px 0 0 18px; padding: 0; }
+
+  .status-line{ display:flex; align-items:center; gap: 8px; font-size: 13px; margin-bottom: 6px; }
+  .status-dot{ width: 8px; height: 8px; border-radius: 50%; background: var(--text-faint); }
+  .status-dot.ok{ background: var(--up); }
+
+  .toast{
+    position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
+    background: var(--gold); color: #1a1408; padding: 12px 20px; border-radius: 8px;
+    font-size: 13.5px; font-weight: 600; opacity: 0; pointer-events: none; transition: opacity .25s ease;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.4); max-width: 90vw; text-align:center;
+  }
+  .toast.show{ opacity: 1; }
+  .toast.bad{ background: var(--danger); color: #2a0d0d; }
+
+  details.setup{ background: var(--bg-panel-2); border: 1px solid var(--line); border-radius: 8px; padding: 14px 16px; margin-bottom: 20px; }
+  details.setup summary{ cursor: pointer; font-size: 13.5px; color: var(--teal); font-weight: 600; }
+  details.setup .steps{ margin-top: 12px; font-size: 13px; color: var(--text-dim); line-height: 1.7; }
+  details.setup .steps ol{ margin: 6px 0 0 18px; padding: 0; }
+  details.setup code{ background: var(--bg); padding: 1px 6px; border-radius: 4px; font-size: 12px; color: var(--gold); }
+
+  #lockScreen{ min-height: 100vh; display:flex; align-items:center; justify-content:center; padding: 20px; }
+  .lock-box{ max-width: 420px; width:100%; background: var(--bg-panel); border: 1px solid var(--line); border-radius: var(--radius); padding: 28px 24px; text-align:center; }
+  .lock-box h1{ font-size: 20px; margin: 0 0 6px; }
+  .lock-box .sub{ margin-bottom: 20px; }
+  #gsiBtnHolder{ display:flex; justify-content:center; margin: 16px 0 4px; min-height: 44px; }
+  .lock-err{ color: var(--danger); font-size: 13px; margin-top: 10px; display:none; }
+  .lock-setup-link{ color: var(--teal); font-size: 12.5px; cursor:pointer; margin-top: 18px; display:inline-block; text-decoration: underline; }
+  .topbar{ display:flex; justify-content:flex-end; margin-bottom: -8px; }
+  .btn-logout{ background: transparent; border: 1px solid var(--line); color: var(--text-faint); font-family:'IBM Plex Mono', monospace; font-size: 11px; padding: 6px 12px; border-radius: 6px; cursor:pointer; }
+  .btn-logout:hover{ border-color: var(--danger); color: var(--danger); }
+
+  .img-field{ display:flex; align-items:center; gap: 10px; margin-bottom: 14px; }
+  .img-preview{ width: 42px; height: 42px; border-radius: 8px; background: var(--bg); border: 1px solid var(--line); overflow:hidden; flex-shrink:0; display:flex; align-items:center; justify-content:center; font-size: 9px; color: var(--text-faint); text-align:center; line-height:1.2; }
+  .img-preview img{ width:100%; height:100%; object-fit:cover; }
+  .img-field-btns{ display:flex; gap: 8px; flex-wrap:wrap; }
+  .btn-sm{ padding: 6px 10px; font-size: 11px; }
+</style>
+</head>
+<body>
+
+<div id="lockScreen">
+  <div class="lock-box" id="lockBoxSetup" style="display:none;">
+    <h1>🔐 Google Sign-In Setup</h1>
+    <p class="sub">Ek dafa ka kaam — apna Google OAuth Client ID aur allowed Gmail accounts daal kar save karein.</p>
+    <label style="text-align:left;">Google OAuth Client ID</label>
+    <input id="cfg_client_id" placeholder="xxxxxxxxxx-xxxxxxxxxxxxxxxx.apps.googleusercontent.com">
+    <label style="text-align:left;">Allowed Gmail accounts (comma se separate karein)</label>
+    <input id="cfg_emails" placeholder="you@gmail.com, partner@gmail.com">
+    <div class="actions" style="justify-content:center;">
+      <button class="btn btn-gold" onclick="saveGoogleConfig()">Save & continue</button>
+    </div>
+    <details class="setup" style="text-align:left; margin-top:16px;">
+      <summary>Client ID kaise banayein?</summary>
+      <div class="steps">
+        <ol>
+          <li><a href="https://console.cloud.google.com/apis/credentials" target="_blank" style="color:var(--gold)">Google Cloud Console → Credentials</a> par jayein (naya project bana lein agar nahi hai)</li>
+          <li><b>OAuth consent screen</b> configure karein — User type: <code>External</code>, apna Gmail add karein bas</li>
+          <li><b>Create Credentials → OAuth client ID</b> → Application type: <code>Web application</code></li>
+          <li><b>Authorized JavaScript origins</b> mein apni site ka URL daalein (jahan yeh admin.html host hogi, e.g. <code>https://username.github.io</code>)</li>
+          <li>Client ID copy karein, upar paste kar ke Save karein</li>
+        </ol>
+      </div>
+    </details>
+  </div>
+
+  <div class="lock-box" id="lockBoxSignin" style="display:none;">
+    <h1>🕊️ Admin Panel</h1>
+    <p class="sub">Sirf allowed Gmail accounts hi is panel ko access kar sakte hain.</p>
+    <div id="gsiBtnHolder"></div>
+    <div class="lock-err" id="lockErr"></div>
+    <span class="lock-setup-link" onclick="showSetup()">Google sign-in settings change karein</span>
+  </div>
+</div>
+
+<div class="wrap" id="adminContent" style="display:none;">
+  <div class="topbar">
+    <button class="btn-logout" id="liveSiteBtn" onclick="goToLiveSite()" style="margin-right:8px;">🌐 Go to Live Site</button>
+    <button class="btn-logout" onclick="googleLogout()">Sign out</button>
+  </div>
+
+  <h1>🕊️ Results Admin Panel</h1>
+  <p class="sub">Edit tournament info and bird results — click Publish and it goes live on the homepage.</p>
+
+  <div class="panel">
+    <h2>🔗 Connect to GitHub</h2>
+    <div class="status-line"><span class="status-dot" id="connDot"></span><span id="connText">Not connected yet — fill in the fields below</span></div>
+    <div class="grid2">
+      <div><label>GitHub username</label><input id="gh_owner" placeholder="e.g. quaidhighschoolksk"></div>
+      <div><label>Repository name</label><input id="gh_repo" placeholder="e.g. Sial-Pigeon-Club"></div>
+      <div><label>Branch</label><input id="gh_branch" value="main"></div>
+      <div><label>Personal access token</label><input id="gh_token" type="password" placeholder="github_pat_..."></div>
+    </div>
+    <div class="actions">
+      <button class="btn btn-ghost" onclick="saveConnection()">Save connection</button>
+    </div>
+    <details class="setup">
+      <summary>Token kaise banayein? (ek dafa ka kaam)</summary>
+      <div class="steps">
+        <ol>
+          <li>GitHub par login karein → profile picture → <b>Settings</b></li>
+          <li>Neeche <b>Developer settings</b></li>
+          <li><b>Personal access tokens</b> → <b>Fine-grained tokens</b> → <b>Generate new token</b></li>
+          <li>Naam de dein, Expiration set karein</li>
+          <li><b>Repository access</b> → apni repo select karein</li>
+          <li><b>Permissions</b> → <b>Contents</b> → "Read and write"</li>
+          <li>Token copy kar ke upar paste karein</li>
+        </ol>
+      </div>
+    </details>
+  </div>
+
+  <div class="panel">
+    <h2>🏷️ Club</h2>
+    <div class="grid2">
+      <div>
+        <label>Select club</label>
+        <select id="clubSelect" onchange="onClubChange()"></select>
+      </div>
+      <div>
+        <label>Club name (shown everywhere for this club)</label>
+        <input id="club_name_field" placeholder="Sial Pigeon Club">
+      </div>
+    </div>
+    <div class="grid2">
+      <div>
+        <label>City (homepage par weather dikhane ke liye)</label>
+        <div style="display:flex; gap:8px;">
+          <input id="club_city_field" placeholder="Faisalabad" style="flex:1;">
+          <button type="button" class="btn btn-ghost btn-sm" style="white-space:nowrap; height:38px; margin-top:0;" onclick="lookupCityCoords()">📍 Confirm</button>
+        </div>
+        <div id="cityStatus" style="font-size:11.5px; color:var(--text-faint); margin:-10px 0 14px;"></div>
+      </div>
+    </div>
+    <div class="actions">
+      <button class="btn btn-ghost" onclick="addClub()">+ Naya club</button>
+      <button class="btn btn-ghost" onclick="deleteClub(this)" style="border-color:var(--danger); color:var(--danger);">🗑 Yeh club delete karein</button>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h2>🏆 Tournament (is club ki history)</h2>
+    <div class="grid2">
+      <div>
+        <label>Select tournament (naam ya date se pehchana jata hai)</label>
+        <select id="tourSelect" onchange="onTourChange()"></select>
+      </div>
+    </div>
+    <div class="actions">
+      <button class="btn btn-ghost" onclick="addTournament()">+ Naya tournament (nayi date)</button>
+      <button class="btn btn-ghost" onclick="deleteTournament(this)" style="border-color:var(--danger); color:var(--danger);">🗑 Yeh tournament delete karein</button>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h2>Tournament info</h2>
+    <div><label>Tournament name (optional)</label><input id="m_tour_name" placeholder="e.g. Spring Derby / بہار کپ"></div>
+    <div class="grid4">
+      <div><label>Date</label><input id="m_date" placeholder="13 Jun 2026"></div>
+      <div><label>Uraan time</label><input id="m_uraan" placeholder="05:00"></div>
+      <div><label>Aakhri time</label><input id="m_aakhri" placeholder="20:30"></div>
+      <div><label>Sunrise</label><input id="m_sunrise" placeholder="04:55"></div>
+      <div><label>Sunset</label><input id="m_sunset" placeholder="19:41"></div>
+      <div><label>Flying (auto: Total − Landed)</label><input id="m_flying" type="number" readonly style="opacity:0.75; cursor:not-allowed;"></div>
+      <div><label>Landed (auto: checkpoints filled in)</label><input id="m_landed" type="number" readonly style="opacity:0.75; cursor:not-allowed;"></div>
+      <div><label>Total pigeons (auto: birds × checkpoints)</label><input id="m_pigeons" type="number" readonly style="opacity:0.75; cursor:not-allowed;"></div>
+      <div><label>Lofts (auto: 1 loft per bird result)</label><input id="m_lofts" type="number" readonly style="opacity:0.75; cursor:not-allowed;"></div>
+    </div>
+    <div class="grid2">
+      <div><label>First Winner — time</label><input id="m_fw_time" placeholder="14:14"></div>
+      <div><label>First Winner — name (Urdu)</label><input id="m_fw_name" dir="rtl" placeholder="استاد گلنواز"></div>
+      <div><label>Winner Pigeon — time</label><input id="m_wp_time" placeholder="20:01"></div>
+      <div><label>Winner Pigeon — name (Urdu)</label><input id="m_wp_name" dir="rtl" placeholder="پیر فواد عظیم"></div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h2>Checkpoint labels</h2>
+    <p class="sub" style="margin-bottom:10px;">In display order left-to-right (e.g. #6, #5, #4, #3, #2, #1) — add or remove as needed, birds update automatically</p>
+    <div class="row-fields-cp" id="colLabels"></div>
+    <button class="btn btn-ghost" onclick="addColumn()">+ Add checkpoint</button>
+  </div>
+
+  <div class="panel">
+    <h2>Bird results</h2>
+    <div id="rows"></div>
+    <button class="btn btn-ghost" onclick="addRow()">+ Add bird</button>
+  </div>
+
+  <div class="actions">
+    <button class="btn btn-gold" id="publishBtn" onclick="publish()">🚀 Publish — go live now</button>
+    <button class="btn btn-ghost" onclick="downloadJson()">⬇ Download data.json</button>
+    <button class="btn btn-ghost" onclick="resetAll()">Reset to sample data</button>
+  </div>
+
+  <div class="toast" id="toast"></div>
+</div>
+</div>
+
+<script>
+const GCFG_KEY = 'pigeon_admin_google_cfg_v1';
+const GSESSION_KEY = 'pigeon_admin_google_session_v1';
+
+function getGoogleConfig(){
+  try{ return JSON.parse(localStorage.getItem(GCFG_KEY)) || null; }catch(e){ return null; }
+}
+
+function showSetup(){
+  document.getElementById('lockBoxSignin').style.display = 'none';
+  const cfg = getGoogleConfig();
+  if(cfg){
+    document.getElementById('cfg_client_id').value = cfg.clientId || '';
+    document.getElementById('cfg_emails').value = (cfg.emails || []).join(', ');
+  }
+  document.getElementById('lockBoxSetup').style.display = 'block';
+}
+
+function saveGoogleConfig(){
+  const clientId = document.getElementById('cfg_client_id').value.trim();
+  const emails = document.getElementById('cfg_emails').value.split(',').map(e=>e.trim().toLowerCase()).filter(Boolean);
+  if(!clientId || emails.length === 0){
+    alert('Client ID aur kam se kam ek Gmail account zaroori hai.');
+    return;
+  }
+  localStorage.setItem(GCFG_KEY, JSON.stringify({ clientId, emails }));
+  sessionStorage.removeItem(GSESSION_KEY);
+  initSignIn();
+}
+
+function decodeJwt(token){
+  const payload = token.split('.')[1];
+  const json = decodeURIComponent(atob(payload.replace(/-/g,'+').replace(/_/g,'/')).split('').map(c=>
+    '%' + ('00'+c.charCodeAt(0).toString(16)).slice(-2)
+  ).join(''));
+  return JSON.parse(json);
+}
+
+function handleCredentialResponse(response){
+  const cfg = getGoogleConfig();
+  const errEl = document.getElementById('lockErr');
+  try{
+    const payload = decodeJwt(response.credential);
+    const email = (payload.email || '').toLowerCase();
+    if(payload.email_verified !== true && payload.email_verified !== 'true'){
+      throw new Error('Email verified nahi hai');
+    }
+    if(!cfg.emails.includes(email)){
+      errEl.textContent = `❌ ${payload.email} allowed list mein nahi hai.`;
+      errEl.style.display = 'block';
+      return;
+    }
+    sessionStorage.setItem(GSESSION_KEY, JSON.stringify({ email, exp: payload.exp }));
+    errEl.style.display = 'none';
+    unlockAdmin();
+  }catch(e){
+    errEl.textContent = '❌ Sign-in fail hui, dobara try karein.';
+    errEl.style.display = 'block';
+  }
+}
+
+function unlockAdmin(){
+  document.getElementById('lockScreen').style.display = 'none';
+  document.getElementById('adminContent').style.display = 'block';
+}
+
+function googleLogout(){
+  sessionStorage.removeItem(GSESSION_KEY);
+  location.reload();
+}
+
+function initSignIn(){
+  const cfg = getGoogleConfig();
+  if(!cfg){ showSetup(); return; }
+
+  document.getElementById('lockBoxSetup').style.display = 'none';
+  document.getElementById('lockBoxSignin').style.display = 'block';
+
+  // Already-valid session this browser tab?
+  try{
+    const sess = JSON.parse(sessionStorage.getItem(GSESSION_KEY));
+    if(sess && sess.exp && sess.exp * 1000 > Date.now() && cfg.emails.includes(sess.email)){
+      unlockAdmin();
+      return;
+    }
+  }catch(e){}
+
+  if(!window.google || !google.accounts || !google.accounts.id){
+    // Google script not loaded yet — retry shortly
+    setTimeout(initSignIn, 300);
+    return;
+  }
+  google.accounts.id.initialize({
+    client_id: cfg.clientId,
+    callback: handleCredentialResponse
+  });
+  const holder = document.getElementById('gsiBtnHolder');
+  holder.innerHTML = '';
+  google.accounts.id.renderButton(holder, { theme: 'filled_black', size: 'large', text: 'signin_with' });
+}
+
+initSignIn();
+</script>
+
+<script>
+const STORAGE_KEY = 'pigeon_admin_data_v3';
+const CONN_KEY = 'pigeon_admin_conn_v1';
+
+const SAMPLE = {
+  clubs: [
+    {
+      id: 'sample-club-1',
+      name: 'Sohni Dharti Pigeon Club',
+      city: "",
+      lat: null,
+      lon: null,
+      tournaments: [
+        {
+          id: 'sample-t-1',
+          name: "",
+          meta: {
+            date: "13 Jun 2026", uraan_time: "05:00", aakhri_time: "20:30",
+            sunrise: "04:55", sunset: "19:41",
+            flying: 21, landed: 111, pigeons: 132, lofts: 12,
+            first_winner_time: "14:14", first_winner_name: "استاد گلنواز",
+            winner_pigeon_time: "20:01", winner_pigeon_name: "پیر فواد عظیم"
+          },
+          columns: ["#6","#5","#4","#3","#2","#1"],
+          birds: [
+            { name:"پیر فواد عظیم امرا", image:"", total:"128:55", deduction:"", note:"", times:["09:46","17:32","17:19","16:42","13:57","13:56"] },
+            { name:"احسان جٹ دہم", image:"", total:"122:55", deduction:"-06:00", note:"کبوتر صبح 5:01 پر آرائے تھے", times:["05:00","16:00","15:01","14:57","14:03","12:28"] },
+            { name:"رانا وسیم", image:"", total:"118:40", deduction:"", note:"", times:["10:20","17:10","16:55","16:20","13:40","13:20"] }
+          ]
+        }
+      ]
+    }
+  ]
+};
+
+function uid(){ return Date.now().toString(36) + Math.random().toString(36).slice(2,7); }
+
+function escapeHtmlAdmin(s){ return (s||'').toString().replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+function blankTournament(cols){
+  return {
+    id: uid(),
+    name: "",
+    meta: {
+      date:"", uraan_time:"05:00", aakhri_time:"20:30", sunrise:"", sunset:"",
+      flying:0, landed:0, pigeons:0, lofts:0,
+      first_winner_time:"", first_winner_name:"", winner_pigeon_time:"", winner_pigeon_name:""
+    },
+    columns: cols ? [...cols] : ["#1","#2","#3"],
+    birds: []
+  };
+}
+
+function blankClub(name){
+  return { id: uid(), name: name || 'Naya Club', city: "", lat: null, lon: null, tournaments: [ blankTournament() ] };
+}
+
+// Converts old single-tournament data.json (meta/columns/birds) into the new
+// clubs -> tournaments structure. Already-migrated data is returned as-is.
+function migrateData(raw){
+  if(raw && Array.isArray(raw.clubs)) return raw;
+  const meta = (raw && raw.meta) ? raw.meta : {};
+  return {
+    clubs: [
+      {
+        id: uid(),
+        name: meta.club_name || 'Club',
+        city: "",
+        lat: null,
+        lon: null,
+        tournaments: [
+          {
+            id: uid(),
+            name: meta.tour_name || "",
+            meta: {
+              date: meta.date||"", uraan_time: meta.uraan_time||"05:00", aakhri_time: meta.aakhri_time||"20:30",
+              sunrise: meta.sunrise||"", sunset: meta.sunset||"",
+              flying: meta.flying||0, landed: meta.landed||0, pigeons: meta.pigeons||0, lofts: meta.lofts||0,
+              first_winner_time: meta.first_winner_time||"", first_winner_name: meta.first_winner_name||"",
+              winner_pigeon_time: meta.winner_pigeon_time||"", winner_pigeon_name: meta.winner_pigeon_name||""
+            },
+            columns: (raw && raw.columns) || ["#1","#2","#3"],
+            birds: (raw && raw.birds) || []
+          }
+        ]
+      }
+    ]
+  };
+}
+
+let data = JSON.parse(JSON.stringify(SAMPLE));
+let currentClubIdx = 0;
+let currentTourIdx = 0;
+let conn = { owner:'', repo:'', branch:'main', token:'' };
+
+function currentTournament(){
+  return data.clubs[currentClubIdx].tournaments[currentTourIdx];
+}
+
+function loadConn(){
+  const saved = localStorage.getItem(CONN_KEY);
+  if(saved){ try{ conn = JSON.parse(saved); }catch(e){} }
+  document.getElementById('gh_owner').value = conn.owner || '';
+  document.getElementById('gh_repo').value = conn.repo || '';
+  document.getElementById('gh_branch').value = conn.branch || 'main';
+  document.getElementById('gh_token').value = conn.token || '';
+  updateConnStatus();
+}
+function saveConnection(){
+  conn.owner = document.getElementById('gh_owner').value.trim();
+  conn.repo = document.getElementById('gh_repo').value.trim();
+  conn.branch = document.getElementById('gh_branch').value.trim() || 'main';
+  conn.token = document.getElementById('gh_token').value.trim();
+  localStorage.setItem(CONN_KEY, JSON.stringify(conn));
+  updateConnStatus();
+  showToast('Connection saved in this browser');
+}
+function updateConnStatus(){
+  const dot = document.getElementById('connDot');
+  const text = document.getElementById('connText');
+  if(conn.owner && conn.repo && conn.token){
+    dot.className = 'status-dot ok';
+    text.textContent = `Ready to publish to ${conn.owner}/${conn.repo} (${conn.branch})`;
+  } else {
+    dot.className = 'status-dot';
+    text.textContent = 'Not connected yet — fill in the fields above and click Save connection';
+  }
+}
+
+const METAFIELDS = ['m_date','m_uraan','m_aakhri','m_sunrise','m_sunset','m_flying','m_landed','m_pigeons','m_lofts','m_fw_time','m_fw_name','m_wp_time','m_wp_name'];
+const METAKEYS = ['date','uraan_time','aakhri_time','sunrise','sunset','flying','landed','pigeons','lofts','first_winner_time','first_winner_name','winner_pigeon_time','winner_pigeon_name'];
+
+function recalcMetaCounts(){
+  const birdCount = document.querySelectorAll('.row-card.bird').length;
+  const colCount = document.querySelectorAll('.f-collabel').length;
+  const total = birdCount * colCount;
+  const filledCount = document.querySelectorAll('.f-cp').length
+    ? Array.from(document.querySelectorAll('.f-cp')).filter(i => i.value.trim()).length
+    : 0;
+  const landed = filledCount;
+  const flying = total - landed;
+  document.getElementById('m_pigeons').value = total;
+  document.getElementById('m_landed').value = landed;
+  document.getElementById('m_flying').value = flying;
+  document.getElementById('m_lofts').value = birdCount;
+}
+
+function populateClubSelect(){
+  const sel = document.getElementById('clubSelect');
+  sel.innerHTML = data.clubs.map((c,i)=>`<option value="${i}">${escapeHtmlAdmin(c.name)}</option>`).join('');
+  sel.value = currentClubIdx;
+}
+
+function populateTourSelect(){
+  const club = data.clubs[currentClubIdx];
+  const sel = document.getElementById('tourSelect');
+  sel.innerHTML = club.tournaments.map((t,i)=>{
+    const label = t.name ? t.name : (t.meta.date ? t.meta.date : `Tournament ${i+1}`);
+    return `<option value="${i}">${escapeHtmlAdmin(label)}</option>`;
+  }).join('');
+  sel.value = currentTourIdx;
+}
+
+function loadCurrentIntoForm(){
+  const club = data.clubs[currentClubIdx];
+  const tour = currentTournament();
+  document.getElementById('club_name_field').value = club.name || '';
+  document.getElementById('club_city_field').value = club.city || '';
+  const cityStatusEl = document.getElementById('cityStatus');
+  if(club.lat != null && club.lon != null){
+    cityStatusEl.textContent = `✅ Location confirmed — ${club.city}`;
+    cityStatusEl.style.color = 'var(--up)';
+  } else {
+    cityStatusEl.textContent = club.city ? '⚠️ Confirm karna baaki hai' : '';
+    cityStatusEl.style.color = 'var(--text-faint)';
+  }
+  document.getElementById('m_tour_name').value = tour.name || '';
+  METAFIELDS.forEach((id,i)=>{ document.getElementById(id).value = tour.meta[METAKEYS[i]] ?? ''; });
+  renderCols();
+  renderRows();
+  recalcMetaCounts();
+}
+
+function onClubChange(){
+  save();
+  currentClubIdx = Number(document.getElementById('clubSelect').value);
+  currentTourIdx = 0;
+  populateTourSelect();
+  loadCurrentIntoForm();
+  save();
+}
+
+function onTourChange(){
+  save();
+  currentTourIdx = Number(document.getElementById('tourSelect').value);
+  loadCurrentIntoForm();
+  save();
+}
+
+function addClub(){
+  save();
+  const name = prompt('Naye club ka naam likhein:', 'Naya Club');
+  if(name === null) return;
+  data.clubs.push(blankClub(name.trim() || 'Naya Club'));
+  currentClubIdx = data.clubs.length - 1;
+  currentTourIdx = 0;
+  populateClubSelect();
+  populateTourSelect();
+  loadCurrentIntoForm();
+  save();
+  showToast('✅ Naya club add ho gaya');
+}
+
+function deleteClub(btn){
+  currentClubIdx = Number(document.getElementById('clubSelect').value);
+  if(data.clubs.length <= 1){ showToast('Kam se kam ek club hona zaroori hai', true); return; }
+  if(btn && btn.dataset.confirming !== 'true'){
+    btn.dataset.confirming = 'true';
+    const original = btn.textContent;
+    btn.textContent = '⚠️ Pakka delete karna hai? Dobara tap karein';
+    btn.style.background = 'rgba(217,124,124,0.15)';
+    setTimeout(() => {
+      if(btn.dataset.confirming === 'true'){
+        btn.dataset.confirming = 'false';
+        btn.textContent = original;
+        btn.style.background = '';
+      }
+    }, 4000);
+    return;
+  }
+  if(btn){ btn.dataset.confirming = 'false'; btn.style.background = ''; }
+  const club = data.clubs[currentClubIdx];
+  const deletedName = club.name;
+  data.clubs.splice(currentClubIdx, 1);
+  currentClubIdx = 0;
+  currentTourIdx = 0;
+  populateClubSelect();
+  populateTourSelect();
+  loadCurrentIntoForm();
+  save();
+  showToast(`"${deletedName}" delete ho gaya`);
+}
+
+function addTournament(){
+  save();
+  const club = data.clubs[currentClubIdx];
+  const t = blankTournament(currentTournament().columns);
+  club.tournaments.push(t);
+  currentTourIdx = club.tournaments.length - 1;
+  populateTourSelect();
+  loadCurrentIntoForm();
+  save();
+  showToast('✅ Naya tournament add ho gaya — is club ki history mein shamil ho gaya');
+}
+
+function deleteTournament(btn){
+  currentClubIdx = Number(document.getElementById('clubSelect').value);
+  currentTourIdx = Number(document.getElementById('tourSelect').value);
+  const club = data.clubs[currentClubIdx];
+  if(club.tournaments.length <= 1){ showToast('Har club ke pass kam se kam ek tournament hona zaroori hai', true); return; }
+  if(btn && btn.dataset.confirming !== 'true'){
+    btn.dataset.confirming = 'true';
+    const original = btn.textContent;
+    btn.textContent = '⚠️ Pakka delete karna hai? Dobara tap karein';
+    btn.style.background = 'rgba(217,124,124,0.15)';
+    setTimeout(() => {
+      if(btn.dataset.confirming === 'true'){
+        btn.dataset.confirming = 'false';
+        btn.textContent = original;
+        btn.style.background = '';
+      }
+    }, 4000);
+    return;
+  }
+  if(btn){ btn.dataset.confirming = 'false'; btn.style.background = ''; }
+  club.tournaments.splice(currentTourIdx, 1);
+  currentTourIdx = 0;
+  populateTourSelect();
+  loadCurrentIntoForm();
+  save();
+  showToast('Tournament delete ho gaya');
+}
+
+async function load(){
+  loadConn();
+  let loadedFromRemote = false;
+
+  if(conn.owner && conn.repo){
+    try{
+      const apiUrl = `https://api.github.com/repos/${conn.owner}/${conn.repo}/contents/data.json?ref=${encodeURIComponent(conn.branch || 'main')}`;
+      const headers = conn.token
+        ? { 'Authorization': `Bearer ${conn.token}`, 'Accept': 'application/vnd.github+json' }
+        : { 'Accept': 'application/vnd.github+json' };
+      const res = await fetch(apiUrl, { headers });
+      if(res.status === 200){
+        const json = await res.json();
+        const parsed = JSON.parse(b64DecodeUnicode(json.content || ''));
+        data = migrateData(parsed);
+        loadedFromRemote = true;
+      }
+    }catch(e){ /* network issue — fall back to local cache below */ }
+  }
+
+  let selection = { clubIdx: 0, tourIdx: 0 };
+  const saved = localStorage.getItem(STORAGE_KEY);
+  if(saved){
+    try{
+      const parsed = JSON.parse(saved);
+      if(!loadedFromRemote){ data = migrateData(parsed.data !== undefined ? parsed.data : parsed); }
+      if(parsed.clubIdx !== undefined) selection = { clubIdx: parsed.clubIdx, tourIdx: parsed.tourIdx || 0 };
+    }catch(e){ if(!loadedFromRemote){ data = JSON.parse(JSON.stringify(SAMPLE)); } }
+  } else if(!loadedFromRemote){
+    data = JSON.parse(JSON.stringify(SAMPLE));
+  }
+
+  currentClubIdx = Math.min(selection.clubIdx, data.clubs.length - 1);
+  currentTourIdx = Math.min(selection.tourIdx, data.clubs[currentClubIdx].tournaments.length - 1);
+  populateClubSelect();
+  populateTourSelect();
+  loadCurrentIntoForm();
+}
+
+function save(){
+  recalcMetaCounts();
+  const club = data.clubs[currentClubIdx];
+  const tour = currentTournament();
+  club.name = document.getElementById('club_name_field').value;
+  tour.name = document.getElementById('m_tour_name').value;
+  METAFIELDS.forEach((id,i)=>{
+    const el = document.getElementById(id);
+    const val = el.type === 'number' ? Number(el.value) : el.value;
+    tour.meta[METAKEYS[i]] = val;
+  });
+  tour.columns = Array.from(document.querySelectorAll('.f-collabel')).map(i=>i.value);
+  tour.birds = Array.from(document.querySelectorAll('.row-card.bird')).map(card=>{
+    return {
+      name: card.querySelector('.f-name').value,
+      image: card.querySelector('.f-image').value,
+      total: card.querySelector('.f-total').value,
+      deduction: card.querySelector('.f-deduction').value,
+      note: card.querySelector('.f-note').value,
+      times: Array.from(card.querySelectorAll('.f-cp')).map(i=>i.value)
+    };
+  });
+  localStorage.setItem(STORAGE_KEY, JSON.stringify({ data, clubIdx: currentClubIdx, tourIdx: currentTourIdx }));
+}
+
+function renderCols(){
+  const wrap = document.getElementById('colLabels');
+  const cols = currentTournament().columns;
+  wrap.innerHTML = cols.map((c,idx)=>`
+    <div style="position:relative;">
+      <input class="f-collabel" value="${c}">
+      <button type="button" onclick="removeColumn(${idx})" style="position:absolute; top:-6px; right:-6px; background:var(--danger); color:#fff; border:none; border-radius:50%; width:18px; height:18px; font-size:11px; line-height:1; cursor:pointer;">×</button>
+    </div>`).join('');
+  attachAutoSave();
+}
+
+function addColumn(){
+  save();
+  const tour = currentTournament();
+  const n = tour.columns.length + 1;
+  tour.columns.push('#' + n);
+  tour.birds.forEach(b => b.times.push(''));
+  renderCols(); renderRows(); recalcMetaCounts(); save();
+}
+
+function removeColumn(idx){
+  save();
+  const tour = currentTournament();
+  if(tour.columns.length <= 1){ showToast('Kam se kam ek checkpoint chahiye', true); return; }
+  tour.columns.splice(idx,1);
+  tour.birds.forEach(b => b.times.splice(idx,1));
+  renderCols(); renderRows(); recalcMetaCounts(); save();
+}
+
+function parseHM(str){
+  if(!str) return 0;
+  const m = String(str).trim().match(/^(-)?(\d+):(\d{1,2})$/);
+  if(!m) return 0;
+  const sign = m[1] ? -1 : 1;
+  return sign * (parseInt(m[2],10)*60 + parseInt(m[3],10));
+}
+
+function formatMinutes(total){
+  const sign = total < 0 ? '-' : '';
+  total = Math.abs(Math.round(total));
+  const h = Math.floor(total/60);
+  const mm = String(total%60).padStart(2,'0');
+  return `${sign}${h}:${mm}`;
+}
+
+function recalcCardTotal(card){
+  const cpVals = Array.from(card.querySelectorAll('.f-cp')).map(i=>i.value.trim()).filter(v=>v);
+  const ded = parseHM(card.querySelector('.f-deduction').value);
+  if(cpVals.length === 0){
+    card.querySelector('.f-total').value = formatMinutes(ded);
+    return;
+  }
+  const uraanStr = document.getElementById('m_uraan').value;
+  const start = parseHM(uraanStr);
+  let sumMinutes = 0;
+  cpVals.forEach(v => {
+    const cp = parseHM(v);
+    let diff = cp - start;
+    if(diff < 0) diff += 1440; // checkpoint after midnight relative to release
+    sumMinutes += diff;
+  });
+  const totalMinutes = sumMinutes + ded;
+  card.querySelector('.f-total').value = formatMinutes(totalMinutes);
+}
+
+function renderRows(){
+  const wrap = document.getElementById('rows');
+  const tour = currentTournament();
+  wrap.innerHTML = '';
+  tour.birds.forEach((b, idx)=>{
+    const div = document.createElement('div');
+    div.className = 'row-card bird';
+    div.innerHTML = `
+      <button class="rm" onclick="removeRow(${idx})">Remove</button>
+      <div class="row-fields">
+        <div><label>Name (Urdu)</label><input class="f-name" dir="rtl" value="${b.name}"></div>
+        <div>
+          <label>Bird photo (optional)</label>
+          <div class="img-field">
+            <div class="img-preview">${b.image ? `<img src="${b.image}" alt="">` : 'No photo'}</div>
+            <div class="img-field-btns">
+              <button type="button" class="btn btn-ghost btn-sm" onclick="this.closest('.img-field').querySelector('.f-image-file').click()">Choose file</button>
+              <button type="button" class="btn btn-ghost btn-sm" style="${b.image ? '' : 'display:none'}" onclick="clearImage(this)">Remove</button>
+            </div>
+            <input type="file" accept="image/*" class="f-image-file" style="display:none" onchange="processImageFile(this)">
+            <input type="hidden" class="f-image" value="${b.image||''}">
+          </div>
+        </div>
+        <div><label>Total time (auto-calculated)</label><input class="f-total" value="${b.total}" readonly style="opacity:0.75; cursor:not-allowed;"></div>
+      </div>
+      <div class="row-fields">
+        <div><label>Deduction (optional, e.g. -06:00)</label><input class="f-deduction" value="${b.deduction||''}"></div>
+        <div style="grid-column: span 2;"><label>Note (optional, Urdu)</label><input class="f-note" dir="rtl" value="${b.note||''}"></div>
+      </div>
+      <label>Checkpoint times (matching labels above)</label>
+      <div class="row-fields-cp">
+        ${tour.columns.map((c,i)=>`<input class="f-cp" placeholder="${c}" value="${b.times[i]||''}">`).join('')}
+      </div>
+    `;
+    wrap.appendChild(div);
+  });
+  document.querySelectorAll('.row-card.bird').forEach(card => recalcCardTotal(card));
+  attachAutoSave();
+}
+
+function processImageFile(inputEl){
+  const file = inputEl.files && inputEl.files[0];
+  if(!file) return;
+  if(!file.type.startsWith('image/')){
+    showToast('Sirf image files allowed hain', true);
+    inputEl.value = '';
+    return;
+  }
+  const field = inputEl.closest('.img-field');
+  const reader = new FileReader();
+  reader.onload = (e)=>{
+    const img = new Image();
+    img.onload = ()=>{
+      const maxDim = 420;
+      let w = img.naturalWidth, h = img.naturalHeight;
+      if(w > h && w > maxDim){ h = Math.round(h * maxDim / w); w = maxDim; }
+      else if(h >= w && h > maxDim){ w = Math.round(w * maxDim / h); h = maxDim; }
+      const canvas = document.createElement('canvas');
+      canvas.width = w; canvas.height = h;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0, w, h);
+      const dataUrl = canvas.toDataURL('image/jpeg', 0.75);
+      field.querySelector('.f-image').value = dataUrl;
+      field.querySelector('.img-preview').innerHTML = `<img src="${dataUrl}" alt="">`;
+      const removeBtn = field.querySelector('.img-field-btns button:last-child');
+      if(removeBtn) removeBtn.style.display = '';
+      inputEl.value = '';
+      save();
+    };
+    img.onerror = ()=>{ showToast('Photo load nahi ho saki', true); };
+    img.src = e.target.result;
+  };
+  reader.onerror = ()=>{ showToast('Photo read nahi ho saki', true); };
+  reader.readAsDataURL(file);
+}
+
+function clearImage(btn){
+  const field = btn.closest('.img-field');
+  field.querySelector('.f-image').value = '';
+  field.querySelector('.img-preview').innerHTML = 'No photo';
+  field.querySelector('.f-image-file').value = '';
+  btn.style.display = 'none';
+  save();
+}
+
+async function lookupCityCoords(){
+  const cityInput = document.getElementById('club_city_field');
+  const city = cityInput.value.trim();
+  const statusEl = document.getElementById('cityStatus');
+  if(!city){
+    statusEl.textContent = 'Pehle city ka naam likhein';
+    statusEl.style.color = 'var(--danger)';
+    return;
+  }
+  statusEl.textContent = 'Dhoond rahe hain...';
+  statusEl.style.color = 'var(--text-faint)';
+  try{
+    const res = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(city)}&count=1&language=en&format=json`);
+    const j = await res.json();
+    if(!j.results || !j.results.length){
+      statusEl.textContent = '❌ City nahi mili — naam check karein (English mein try karein)';
+      statusEl.style.color = 'var(--danger)';
+      return;
+    }
+    const r = j.results[0];
+    const club = data.clubs[currentClubIdx];
+    club.city = city;
+    club.lat = r.latitude;
+    club.lon = r.longitude;
+    const place = [r.name, r.admin1, r.country].filter(Boolean).join(', ');
+    statusEl.textContent = `✅ Mil gaya: ${place}`;
+    statusEl.style.color = 'var(--up)';
+    save();
+    showToast('✅ City confirm ho gayi — homepage par weather dikhega');
+  }catch(e){
+    statusEl.textContent = '❌ Internet check karein, dobara koshish karein';
+    statusEl.style.color = 'var(--danger)';
+  }
+}
+
+function attachAutoSave(){
+  document.querySelectorAll('input:not(.f-image-file):not(.f-image), textarea, select').forEach(el=>{
+    el.oninput = () => {
+      const card = el.closest('.row-card.bird');
+      if(card && (el.classList.contains('f-cp') || el.classList.contains('f-deduction'))){
+        recalcCardTotal(card);
+      }
+      if(el.classList.contains('f-cp')){
+        recalcMetaCounts();
+      }
+      if(el.id === 'm_uraan'){
+        document.querySelectorAll('.row-card.bird').forEach(c => recalcCardTotal(c));
+      }
+      save();
+    };
+    el.onchange = el.oninput;
+  });
+}
+
+function addRow(){
+  save();
+  const tour = currentTournament();
+  tour.birds.push({ name:"نیا کبوتر", image:"", total:"00:00", deduction:"", note:"", times: tour.columns.map(()=>"") });
+  renderRows(); recalcMetaCounts(); save();
+}
+function removeRow(idx){ save(); currentTournament().birds.splice(idx,1); renderRows(); recalcMetaCounts(); save(); }
+
+function resetAll(){
+  if(!confirm('Reset all fields to the original sample data?')) return;
+  localStorage.removeItem(STORAGE_KEY);
+  data = JSON.parse(JSON.stringify(SAMPLE));
+  currentClubIdx = 0;
+  currentTourIdx = 0;
+  load();
+  showToast('Reset to sample data');
+}
+
+function showToast(msg, bad){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast show' + (bad ? ' bad' : '');
+  setTimeout(()=>{ t.className = 'toast'; }, 3200);
+}
+
+function b64EncodeUnicode(str){ return btoa(unescape(encodeURIComponent(str))); }
+function b64DecodeUnicode(str){ return decodeURIComponent(escape(atob((str||'').replace(/\n/g,'')))); }
+
+function downloadJson(){
+  save();
+  const json = JSON.stringify(data, null, 2);
+  const blob = new Blob([json], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'data.json';
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  showToast('Downloaded data.json');
+}
+
+async function publish(){
+  save();
+  if(!conn.owner || !conn.repo || !conn.token){
+    showToast('Pehle GitHub se connect karein (upar wala form bharein)', true);
+    return;
+  }
+  const btn = document.getElementById('publishBtn');
+  btn.disabled = true;
+  btn.textContent = 'Publishing…';
+
+  const apiUrl = `https://api.github.com/repos/${conn.owner}/${conn.repo}/contents/data.json`;
+  const headers = { 'Authorization': `Bearer ${conn.token}`, 'Accept': 'application/vnd.github+json' };
+
+  try{
+    let sha = undefined;
+    const getRes = await fetch(`${apiUrl}?ref=${encodeURIComponent(conn.branch)}`, { headers });
+    if(getRes.status === 200){ sha = (await getRes.json()).sha; }
+    else if(getRes.status !== 404){
+      const errBody = await getRes.json().catch(()=>({}));
+      throw new Error(errBody.message || `GET failed (${getRes.status})`);
+    }
+
+    const content = b64EncodeUnicode(JSON.stringify(data, null, 2));
+    const putRes = await fetch(apiUrl, {
+      method: 'PUT',
+      headers: { ...headers, 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        message: 'Update tournament results via admin panel',
+        content: content,
+        branch: conn.branch,
+        ...(sha ? { sha } : {})
+      })
+    });
+    if(!putRes.ok){
+      const errBody = await putRes.json().catch(()=>({}));
+      throw new Error(errBody.message || `Publish failed (${putRes.status})`);
+    }
+    showToast('✅ Published! Live on the homepage in about a minute.');
+  } catch(err){
+    showToast('❌ ' + err.message, true);
+  } finally {
+    btn.disabled = false;
+    btn.textContent = '🚀 Publish — go live now';
+  }
+}
+
+function goToLiveSite(){
+  loadConn();
+  if(conn.owner && conn.repo){
+    // If repo is a user/org pages repo (username.github.io), site is at the root
+    const isUserPagesRepo = conn.repo.toLowerCase() === `${conn.owner.toLowerCase()}.github.io`;
+    const url = isUserPagesRepo
+      ? `https://${conn.owner}.github.io/`
+      : `https://${conn.owner}.github.io/${conn.repo}/`;
+    window.open(url, '_blank');
+  } else {
+    // Not connected yet — fall back to opening the homepage in this folder
+    window.open('index.html', '_blank');
+  }
+}
+
+load();
+</script>
+</body>
+</html>
