@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="ur">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Weather</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu:wght@400;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap');
+
+  :root{
+    --green: #4C7A5E;
+    --green-dark: #3C6249;
+    --bg: #F5F7F5;
+    --card: #FFFFFF;
+    --gold: #F0A93A;
+    --text: #1E2622;
+    --text-dim: #5C6B62;
+    --line: #E2E8E3;
+    --radius: 14px;
+    --temp: #C0392B;
+    --precip: #2980EA;
+    --wind: #8E44AD;
+  }
+  *{ box-sizing: border-box; }
+  body{ margin:0; background: var(--bg); color: var(--text); font-family: 'IBM Plex Sans', system-ui, sans-serif; }
+  .wrap{ max-width: 620px; margin: 0 auto; padding: 18px 14px 60px; }
+
+  .weather-banner{
+    background: linear-gradient(160deg, var(--green), var(--green-dark));
+    color:#fff; border-radius: var(--radius); padding: 20px 20px 22px; margin-bottom: 16px;
+  }
+  .weather-banner h1{ margin:0; font-size: 24px; font-weight:700; display:flex; align-items:center; gap:10px; }
+  .weather-banner p{ margin: 6px 0 0; font-size: 13px; opacity: 0.85; }
+
+  .city-tabs{
+    display:flex; gap: 8px; overflow-x:auto; padding-bottom: 4px; margin-bottom: 14px;
+    scrollbar-width: thin;
+  }
+  .city-tab{
+    flex: 0 0 auto; background: var(--card); border: 1px solid var(--line); color: var(--text);
+    padding: 9px 16px; border-radius: 20px; font-size: 13.5px; font-weight:600; cursor:pointer;
+    font-family: inherit;
+  }
+  .city-tab.active{ background: var(--green); border-color: var(--green); color:#fff; }
+
+  .weather-card{ background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 16px 16px 10px; }
+  .wcard-current{ display:flex; align-items:center; gap: 12px; margin-bottom: 10px; }
+  .wcard-current .emoji{ font-size: 38px; }
+  .wcard-current .temp{ font-size: 26px; font-weight:700; }
+  .wcard-current .desc{ font-size: 12.5px; color: var(--text-dim); }
+  .forecast-title{ font-size: 14px; font-weight:600; margin-bottom: 8px; color: var(--green-dark); }
+  .chart-wrap{ position:relative; }
+  .chart-note{ text-align:center; padding: 40px 0; color: var(--text-dim); font-size: 13px; }
+  .chart-legend{ display:flex; gap: 16px; flex-wrap:wrap; margin: 8px 0 4px; font-size: 12px; color: var(--text-dim); }
+  .chart-legend span{ display:flex; align-items:center; gap: 6px; }
+  .chart-legend i{ display:inline-block; width: 12px; height: 4px; border-radius: 2px; }
+
+  footer{ text-align:center; padding: 20px 0 0; }
+  footer a{
+    color: var(--green); text-decoration:none; border: 1px solid var(--green);
+    padding: 7px 16px; border-radius: 20px; font-size: 12.5px; font-weight: 600;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="weather-banner">
+    <h1>☁️ Weather</h1>
+    <p>Punjab ke shehron ka 3-din ka mausam forecast — pigeon flying ki planning ke liye</p>
+  </div>
+
+  <div class="city-tabs" id="cityTabs"></div>
+
+  <div class="weather-card">
+    <div class="wcard-current" id="wcardCurrent"></div>
+    <div class="forecast-title" id="forecastTitle">Weather forecast</div>
+    <div class="chart-wrap">
+      <canvas id="tempChart" height="170"></canvas>
+    </div>
+    <div class="chart-wrap" style="margin-top:6px;">
+      <canvas id="windChart" height="90"></canvas>
+    </div>
+    <div class="chart-legend">
+      <span><i style="background:var(--temp)"></i> Temperature °C</span>
+      <span><i style="background:var(--precip)"></i> Precipitation mm</span>
+      <span><i style="background:var(--wind)"></i> Wind m/s</span>
+    </div>
+  </div>
+
+  <footer><a href="index.html">← Home</a></footer>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+<script>
+const CITIES = [
+  { name:'Kharian',     lat:32.8127, lon:73.8630 },
+  { name:'Jhelum',      lat:32.9425, lon:73.7257 },
+  { name:'Gujrat',      lat:32.5740, lon:74.0789 },
+  { name:'Gujranwala',  lat:32.1877, lon:74.1945 },
+  { name:'Faisalabad',  lat:31.4180, lon:73.0791 },
+  { name:'Lahore',      lat:31.5497, lon:74.3436 },
+  { name:'Islamabad',   lat:33.6844, lon:73.0479 },
+  { name:'Sialkot',     lat:32.4945, lon:74.5229 },
+  { name:'Rawalpindi',  lat:33.5651, lon:73.0169 },
+];
+
+let activeCity = CITIES[0];
+let tempChart = null, windChart = null;
+
+function weatherEmoji(code){
+  if(code === 0) return '☀️';
+  if(code === 1) return '🌤️';
+  if(code === 2) return '⛅';
+  if(code === 3) return '☁️';
+  if(code === 45 || code === 48) return '🌫️';
+  if([51,53,55,56,57].includes(code)) return '🌦️';
+  if([61,63,65,66,67].includes(code)) return '🌧️';
+  if([71,73,75,77].includes(code)) return '❄️';
+  if([80,81,82].includes(code)) return '🌦️';
+  if([85,86].includes(code)) return '🌨️';
+  if([95,96,99].includes(code)) return '⛈️';
+  return '🌡️';
+}
+function weatherDesc(code){
+  if(code === 0) return 'Saaf aasman';
+  if(code === 1 || code === 2) return 'Kuch badal';
+  if(code === 3) return 'Ghera hua';
+  if(code === 45 || code === 48) return 'Dhund';
+  if([51,53,55,56,57].includes(code)) return 'Halki phuhaar';
+  if([61,63,65,66,67].includes(code)) return 'Baarish';
+  if([71,73,75,77].includes(code)) return 'Barf';
+  if([80,81,82].includes(code)) return 'Baarish ke shower';
+  if([85,86].includes(code)) return 'Barf ke shower';
+  if([95,96,99].includes(code)) return 'Tez aandhi/toofan';
+  return '';
+}
+
+function renderTabs(){
+  const wrap = document.getElementById('cityTabs');
+  wrap.innerHTML = CITIES.map(c =>
+    `<button class="city-tab${c.name===activeCity.name ? ' active' : ''}" onclick="selectCity('${c.name}')">${c.name}</button>`
+  ).join('');
+}
+
+function selectCity(name){
+  const c = CITIES.find(x => x.name === name);
+  if(!c) return;
+  activeCity = c;
+  renderTabs();
+  loadForecast();
+}
+
+async function loadForecast(){
+  document.getElementById('forecastTitle').textContent = `Weather forecast for ${activeCity.name}`;
+  document.getElementById('wcardCurrent').innerHTML = '';
+  try{
+    const url = `https://api.open-meteo.com/v1/forecast?latitude=${activeCity.lat}&longitude=${activeCity.lon}&hourly=temperature_2m,precipitation,wind_speed_10m,weather_code&current_weather=true&forecast_days=3&timezone=auto`;
+    const res = await fetch(url);
+    if(!res.ok) throw new Error('fetch failed');
+    const j = await res.json();
+
+    const cw = j.current_weather;
+    if(cw){
+      document.getElementById('wcardCurrent').innerHTML = `
+        <div class="emoji">${weatherEmoji(cw.weathercode)}</div>
+        <div>
+          <div class="temp">${Math.round(cw.temperature)}°C</div>
+          <div class="desc">${weatherDesc(cw.weathercode)} · Wind ${Math.round(cw.windspeed)} km/h</div>
+        </div>`;
+    }
+
+    const h = j.hourly;
+    const idxs = h.time.map((t,i)=>i).filter(i => new Date(h.time[i]).getHours() % 2 === 0);
+    const labels = idxs.map(i=>{
+      const d = new Date(h.time[i]);
+      const hh = String(d.getHours()).padStart(2,'0');
+      if(d.getHours() === 0){
+        const dayLabel = d.toLocaleDateString('en-GB', { weekday:'short', day:'numeric', month:'long' });
+        return [hh, dayLabel];
+      }
+      return hh;
+    });
+    const temps = idxs.map(i => h.temperature_2m[i]);
+    const precs = idxs.map(i => h.precipitation[i]);
+    const winds = idxs.map(i => h.wind_speed_10m[i]);
+
+    drawCharts(labels, temps, precs, winds);
+  }catch(e){
+    document.getElementById('tempChart').style.display = 'none';
+    document.getElementById('windChart').style.display = 'none';
+    const wrap = document.querySelector('.chart-wrap');
+    if(wrap && !document.getElementById('chartErr')){
+      const err = document.createElement('div');
+      err.id = 'chartErr';
+      err.className = 'chart-note';
+      err.textContent = 'Weather load nahi ho saka — internet check karke dobara try karein';
+      wrap.appendChild(err);
+    }
+  }
+}
+
+function drawCharts(labels, temps, precs, winds){
+  document.getElementById('tempChart').style.display = '';
+  document.getElementById('windChart').style.display = '';
+  const errEl = document.getElementById('chartErr');
+  if(errEl) errEl.remove();
+
+  const tctx = document.getElementById('tempChart').getContext('2d');
+  const wctx = document.getElementById('windChart').getContext('2d');
+  if(tempChart) tempChart.destroy();
+  if(windChart) windChart.destroy();
+
+  tempChart = new Chart(tctx, {
+    data: {
+      labels,
+      datasets: [
+        { type:'bar', label:'Precipitation mm', data: precs, backgroundColor:'#2980EA', yAxisID:'y1', barPercentage:0.5, categoryPercentage:0.8 },
+        { type:'line', label:'Temperature °C', data: temps, borderColor:'#C0392B', backgroundColor:'rgba(192,57,43,0.08)', fill:true, tension:0.35, pointRadius:0, borderWidth:2, yAxisID:'y' }
+      ]
+    },
+    options: {
+      responsive: true,
+      interaction: { mode:'index', intersect:false },
+      plugins: { legend: { display:false } },
+      scales: {
+        y: { position:'left', grid:{ color:'#eee' }, ticks:{ font:{ size:10 } } },
+        y1: { position:'right', min:0, suggestedMax:8, grid:{ drawOnChartArea:false }, ticks:{ font:{ size:10 } } },
+        x: { grid:{ color:'#f2f2f2' }, ticks:{ autoSkip:false, maxRotation:0, font:{ size:9 } } }
+      }
+    }
+  });
+
+  windChart = new Chart(wctx, {
+    type: 'line',
+    data: {
+      labels,
+      datasets: [
+        { label:'Wind m/s', data: winds, borderColor:'#8E44AD', backgroundColor:'rgba(142,68,173,0.08)', fill:true, tension:0.35, pointRadius:0, borderWidth:2 }
+      ]
+    },
+    options: {
+      responsive: true,
+      plugins: { legend: { display:false } },
+      scales: {
+        y: { grid:{ color:'#eee' }, ticks:{ font:{ size:10 } } },
+        x: { grid:{ color:'#f2f2f2' }, ticks:{ autoSkip:false, maxRotation:0, font:{ size:9 } } }
+      }
+    }
+  });
+}
+
+renderTabs();
+loadForecast();
+</script>
+</body>
+</html>
