@@ -16,14 +16,14 @@
             "aakhri_time": "20:30",
             "sunrise": "",
             "sunset": "",
-            "flying": 1,
-            "landed": 5,
+            "flying": 0,
+            "landed": 6,
             "pigeons": 6,
             "lofts": 2,
             "first_winner_time": "12:24",
             "first_winner_name": "خالد سیال",
-            "winner_pigeon_time": "",
-            "winner_pigeon_name": "",
+            "winner_pigeon_time": "18:55",
+            "winner_pigeon_name": "خالد سیال",
             "is_live": true
           },
           "columns": [
@@ -47,13 +47,13 @@
             {
               "name": "خالد سیال",
               "image": "",
-              "total": "18:19",
+              "total": "32:14",
               "deduction": "",
               "note": "",
               "times": [
                 "12:24",
                 "15:55",
-                ""
+                "18:55"
               ]
             }
           ]
