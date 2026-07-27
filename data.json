@@ -23,7 +23,8 @@
             "first_winner_time": "",
             "first_winner_name": "",
             "winner_pigeon_time": "",
-            "winner_pigeon_name": ""
+            "winner_pigeon_name": "",
+            "is_live": true
           },
           "columns": [
             "#1",
