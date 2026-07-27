@@ -59,6 +59,67 @@
           ]
         }
       ]
+    },
+    {
+      "id": "ms3cpcngofiuv",
+      "name": "Naya Club 2",
+      "city": "",
+      "lat": null,
+      "lon": null,
+      "tournaments": [
+        {
+          "id": "ms3cpcngxw8zu",
+          "name": "",
+          "meta": {
+            "date": "",
+            "uraan_time": "05:00",
+            "aakhri_time": "20:30",
+            "sunrise": "",
+            "sunset": "",
+            "flying": 0,
+            "landed": 0,
+            "pigeons": 0,
+            "lofts": 0,
+            "is_live": false,
+            "first_winner_time": "",
+            "first_winner_name": "",
+            "winner_pigeon_time": "",
+            "winner_pigeon_name": ""
+          },
+          "columns": [
+            "#1",
+            "#2",
+            "#3"
+          ],
+          "birds": []
+        },
+        {
+          "id": "ms3cpgcql2fpp",
+          "name": "",
+          "meta": {
+            "date": "",
+            "uraan_time": "05:00",
+            "aakhri_time": "20:30",
+            "sunrise": "",
+            "sunset": "",
+            "flying": 0,
+            "landed": 0,
+            "pigeons": 0,
+            "lofts": 0,
+            "is_live": false,
+            "first_winner_time": "",
+            "first_winner_name": "",
+            "winner_pigeon_time": "",
+            "winner_pigeon_name": ""
+          },
+          "columns": [
+            "#1",
+            "#2",
+            "#3"
+          ],
+          "birds": []
+        }
+      ]
     }
   ]
 }
