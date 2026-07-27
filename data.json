@@ -94,6 +94,63 @@
           "birds": []
         }
       ]
+    },
+    {
+      "id": "ms3ct0g43upsh",
+      "name": "Naya Club 3",
+      "city": "",
+      "lat": null,
+      "lon": null,
+      "tournaments": [
+        {
+          "id": "ms3ct0g4v2zqg",
+          "name": "",
+          "meta": {
+            "date": "",
+            "uraan_time": "05:00",
+            "aakhri_time": "20:30",
+            "sunrise": "",
+            "sunset": "",
+            "flying": 0,
+            "landed": 4,
+            "pigeons": 4,
+            "lofts": 2,
+            "is_live": false,
+            "first_winner_time": "11:55",
+            "first_winner_name": "نیا کبوتر",
+            "winner_pigeon_time": "12:32",
+            "winner_pigeon_name": "نیا کبوتر"
+          },
+          "columns": [
+            "#1",
+            "#2"
+          ],
+          "birds": [
+            {
+              "name": "نیا کبوتر",
+              "image": "",
+              "total": "13:55",
+              "deduction": "",
+              "note": "",
+              "times": [
+                "11:23",
+                "12:32"
+              ]
+            },
+            {
+              "name": "نیا کبوتر",
+              "image": "",
+              "total": "13:51",
+              "deduction": "",
+              "note": "",
+              "times": [
+                "11:55",
+                "11:56"
+              ]
+            }
+          ]
+        }
+      ]
     }
   ]
 }
