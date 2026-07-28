@@ -20,18 +20,18 @@
             "landed": 3,
             "pigeons": 3,
             "lofts": 1,
-            "first_winner_time": "13:25",
-            "first_winner_name": "خالد سیال",
-            "winner_pigeon_time": "15:44",
-            "winner_pigeon_name": "خالد سیال",
+            "first_winner_time": "12:44",
+            "first_winner_name": "نیا کبوتر",
+            "winner_pigeon_time": "14:55",
+            "winner_pigeon_name": "نیا کبوتر",
             "is_live": false,
             "daily_winners": [
               {
                 "day": 1,
-                "first_winner_name": "خالد سیال",
-                "first_winner_time": "13:25",
-                "winner_pigeon_name": "خالد سیال",
-                "winner_pigeon_time": "15:44",
+                "first_winner_name": "نیا کبوتر",
+                "first_winner_time": "12:44",
+                "winner_pigeon_name": "نیا کبوتر",
+                "winner_pigeon_time": "14:55",
                 "ready": true
               }
             ],
@@ -44,15 +44,15 @@
           ],
           "birds": [
             {
-              "name": "خالد سیال",
+              "name": "نیا کبوتر",
               "image": "",
-              "total": "29:04",
+              "total": "26:23",
               "deduction": "",
               "note": "",
               "times": [
-                "1/13:25",
-                "1/14:55",
-                "1/15:44"
+                "1/12:44",
+                "1/13:44",
+                "1/14:55"
               ]
             }
           ]
