@@ -17,12 +17,12 @@
             "sunrise": "",
             "sunset": "",
             "flying": 0,
-            "landed": 6,
-            "pigeons": 6,
-            "lofts": 1,
+            "landed": 12,
+            "pigeons": 12,
+            "lofts": 2,
             "first_winner_time": "13:25",
             "first_winner_name": "خالد سیال",
-            "winner_pigeon_time": "13:44",
+            "winner_pigeon_time": "15:44",
             "winner_pigeon_name": "خالد سیال",
             "is_live": true,
             "daily_winners": [
@@ -30,16 +30,16 @@
                 "day": 1,
                 "first_winner_name": "خالد سیال",
                 "first_winner_time": "13:25",
-                "winner_pigeon_name": "",
-                "winner_pigeon_time": "",
+                "winner_pigeon_name": "خالد سیال",
+                "winner_pigeon_time": "15:44",
                 "ready": true
               },
               {
                 "day": 2,
                 "first_winner_name": "",
                 "first_winner_time": "",
-                "winner_pigeon_name": "خالد سیال",
-                "winner_pigeon_time": "13:44",
+                "winner_pigeon_name": "",
+                "winner_pigeon_time": "",
                 "ready": true
               }
             ],
@@ -57,7 +57,7 @@
             {
               "name": "خالد سیال",
               "image": "",
-              "total": "Din 1: 29:15 · Din 2: 22:47",
+              "total": "Din 1: 39:59 · Din 2: 14:03",
               "deduction": "",
               "note": "",
               "times": [
@@ -66,7 +66,22 @@
                 "1/15:55",
                 "2/11:22",
                 "2/12:41",
-                "2/13:44"
+                "1/15:44"
+              ]
+            },
+            {
+              "name": "سیفی گجر",
+              "image": "",
+              "total": "62:46",
+              "deduction": "",
+              "note": "",
+              "times": [
+                "1/13:22",
+                "1/19:55",
+                "1/19:57",
+                "1/10:41",
+                "1/13:55",
+                "1/14:56"
               ]
             }
           ],
