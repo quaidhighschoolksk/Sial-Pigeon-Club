@@ -17,9 +17,9 @@
             "sunrise": "",
             "sunset": "",
             "flying": 0,
-            "landed": 12,
-            "pigeons": 12,
-            "lofts": 2,
+            "landed": 18,
+            "pigeons": 18,
+            "lofts": 3,
             "first_winner_time": "13:25",
             "first_winner_name": "خالد سیال",
             "winner_pigeon_time": "15:44",
@@ -82,6 +82,21 @@
                 "1/10:41",
                 "1/13:55",
                 "1/14:56"
+              ]
+            },
+            {
+              "name": "نیا کبوتر",
+              "image": "",
+              "total": "43:16",
+              "deduction": "",
+              "note": "",
+              "times": [
+                "1/12:44",
+                "1/12:55",
+                "1/19:59",
+                "1/8:50",
+                "1/8:57",
+                "1/9:51"
               ]
             }
           ],
