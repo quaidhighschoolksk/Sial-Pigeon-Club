@@ -22,7 +22,7 @@
             "lofts": 3,
             "first_winner_time": "13:22",
             "first_winner_name": "Khalid sial",
-            "winner_pigeon_time": "16:03",
+            "winner_pigeon_time": "17:57",
             "winner_pigeon_name": "نیا کبوتر",
             "is_live": true,
             "daily_winners": [
@@ -31,7 +31,7 @@
                 "first_winner_name": "Khalid sial",
                 "first_winner_time": "13:22",
                 "winner_pigeon_name": "نیا کبوتر",
-                "winner_pigeon_time": "17:55",
+                "winner_pigeon_time": "17:57",
                 "ready": true
               },
               {
@@ -104,7 +104,7 @@
             {
               "name": "نیا کبوتر",
               "image": "",
-              "total": "Din 1: 46:14 · Din 2: 42:18 · Din 3: 22:05",
+              "total": "Din 1: 72:07 · Din 2: 42:18",
               "deduction": "",
               "note": "",
               "times": [
@@ -115,8 +115,8 @@
                 "2/19:11",
                 "2/19:12",
                 "1/17:55",
-                "3/16:02",
-                "3/16:03"
+                "1/17:56",
+                "1/17:57"
               ]
             }
           ],
