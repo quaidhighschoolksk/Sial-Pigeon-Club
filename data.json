@@ -44,14 +44,19 @@
               },
               {
                 "day": 3,
-                "first_winner_name": "Khalid sial",
+                "first_winner_name": "Khalid sial & نیا کبوتر",
                 "first_winner_time": "17:55",
                 "winner_pigeon_name": "Khalid sial",
                 "winner_pigeon_time": "19:01",
                 "ready": true
               }
             ],
-            "duration_days": 3
+            "duration_days": 3,
+            "day_dates": {
+              "1": "14 Aug 2026",
+              "2": "16 Aug 2026",
+              "3": "18 Aug 2026"
+            }
           },
           "columns": [
             "#1",
