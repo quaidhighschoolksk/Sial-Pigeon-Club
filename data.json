@@ -20,24 +20,24 @@
             "landed": 27,
             "pigeons": 27,
             "lofts": 3,
-            "first_winner_time": "13:22",
-            "first_winner_name": "Khalid sial",
-            "winner_pigeon_time": "17:57",
+            "first_winner_time": "19:50",
+            "first_winner_name": "نیا کبوتر",
+            "winner_pigeon_time": "18:55",
             "winner_pigeon_name": "نیا کبوتر",
             "is_live": true,
             "daily_winners": [
               {
                 "day": 1,
-                "first_winner_name": "Khalid sial",
-                "first_winner_time": "13:22",
+                "first_winner_name": "نیا کبوتر",
+                "first_winner_time": "19:50",
                 "winner_pigeon_name": "نیا کبوتر",
-                "winner_pigeon_time": "17:57",
+                "winner_pigeon_time": "19:53",
                 "ready": true
               },
               {
                 "day": 2,
-                "first_winner_name": "نیا کبوتر",
-                "first_winner_time": "18:55",
+                "first_winner_name": "Saifi Gujjar",
+                "first_winner_time": "15:59",
                 "winner_pigeon_name": "Saifi Gujjar",
                 "winner_pigeon_time": "19:55",
                 "ready": true
@@ -104,19 +104,19 @@
             {
               "name": "نیا کبوتر",
               "image": "",
-              "total": "Din 1: 72:07 · Din 2: 42:18",
+              "total": "Din 1: 44:34 · Din 2: 23:07 · Din 3: 40:31",
               "deduction": "",
               "note": "",
               "times": [
-                "1/11:51",
-                "1/17:55",
-                "1/18:33",
-                "2/18:55",
-                "2/19:11",
-                "2/19:12",
-                "1/17:55",
-                "1/17:56",
-                "1/17:57"
+                "1/19:50",
+                "1/19:51",
+                "1/19:53",
+                "2/11:22",
+                "2/12:50",
+                "2/13:55",
+                "3/17:55",
+                "3/18:41",
+                "3/18:55"
               ]
             }
           ],
