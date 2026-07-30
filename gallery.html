@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="ur">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gallery</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu:wght@400;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap');
+
+  :root{
+    --green: #4C7A5E;
+    --green-dark: #3C6249;
+    --bg: #F5F7F5;
+    --card: #FFFFFF;
+    --gold: #F0A93A;
+    --text: #1E2622;
+    --text-dim: #5C6B62;
+    --line: #E2E8E3;
+    --danger: #D64545;
+    --radius: 14px;
+  }
+  *{ box-sizing: border-box; }
+  body{
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'IBM Plex Sans', system-ui, sans-serif;
+  }
+  .urdu{ font-family: 'Noto Nastaliq Urdu', serif; direction: rtl; unicode-bidi: embed; line-height: 1.9; }
+
+  .wrap{ max-width: 620px; margin: 0 auto; padding: 14px 14px 60px; }
+
+  .back-link{ display:inline-flex; align-items:center; gap:4px; color: var(--green); text-decoration:none; font-size: 13px; font-weight:600; margin-bottom: 10px; }
+
+  .page-title{ font-size: 22px; font-weight: 700; margin: 4px 0 12px; display:flex; align-items:center; gap:8px; }
+
+  /* Tournament history chips (same style as club.html) */
+  .history{ display:flex; gap: 8px; overflow-x:auto; padding-bottom: 6px; margin-bottom: 14px; }
+  .history-chip{
+    flex-shrink:0; background: var(--card); border: 1.5px solid var(--line); color: var(--text-dim);
+    border-radius: 20px; padding: 8px 14px; font-size: 12.5px; font-weight: 600; text-decoration:none; white-space:nowrap;
+  }
+  .history-chip.active{ background: var(--green); border-color: var(--green); color:#fff; }
+
+  .infobar{
+    background: linear-gradient(160deg, var(--green), var(--green-dark));
+    color: #fff; border-radius: var(--radius);
+    padding: 14px 16px; font-size: 14px; line-height: 1.6;
+    margin-bottom: 16px;
+  }
+  .infobar .line1{ font-weight: 600; }
+
+  .gallery-grid{
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 10px;
+  }
+  .gallery-item{
+    border-radius: 12px; overflow: hidden; border: 1px solid var(--line);
+    background: var(--card); cursor: pointer;
+  }
+  .gallery-item img{ width:100%; height: 140px; object-fit: cover; display:block; }
+  .gallery-item.is-video img{ opacity: 0.75; }
+  .gallery-item .no-thumb{ width:100%; height:140px; display:flex; align-items:center; justify-content:center; font-size:30px; background:#111; }
+  .gallery-item .play-badge{
+    position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+    font-size: 34px; text-shadow: 0 0 8px rgba(0,0,0,0.7); pointer-events:none;
+  }
+  .gallery-item{ position: relative; }
+
+  .empty-box{
+    background: var(--card); border: 1px dashed var(--line); border-radius: var(--radius);
+    padding: 40px 20px; text-align:center; color: var(--text-dim); font-size: 14px;
+  }
+  .error-box{
+    background: #FFF3F3; border: 1px solid var(--danger); color: var(--danger);
+    border-radius: var(--radius); padding: 16px; font-size: 13.5px;
+  }
+
+  /* Lightbox */
+  .lightbox{
+    display:none; position: fixed; inset: 0; background: rgba(0,0,0,0.88);
+    z-index: 999; align-items:center; justify-content:center; padding: 20px;
+  }
+  .lightbox.open{ display:flex; }
+  .lightbox img, .lightbox video{ max-width: 100%; max-height: 90vh; border-radius: 10px; }
+  .lightbox-close{
+    position: absolute; top: 18px; right: 18px; background: rgba(255,255,255,0.15); color:#fff;
+    border:none; border-radius: 50%; width: 38px; height: 38px; font-size: 18px; cursor:pointer;
+  }
+
+  footer{ text-align:center; margin-top: 24px; }
+  footer a{ color: var(--green); font-weight:600; text-decoration:none; font-size: 13.5px; }
+</style>
+</head>
+<body>
+<div class="wrap" id="app">
+  <div class="empty-box">Loading…</div>
+</div>
+
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+  <button class="lightbox-close" onclick="closeLightbox(event)">✕</button>
+  <div id="lightboxBody" onclick="event.stopPropagation()"></div>
+</div>
+
+<script>
+function escapeHtml(s){ return (s||'').toString().replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+function qsParam(name){
+  return new URLSearchParams(window.location.search).get(name);
+}
+
+function migrateData(raw){
+  if(raw && Array.isArray(raw.clubs)) return raw;
+  const meta = (raw && raw.meta) ? raw.meta : {};
+  return {
+    clubs: [
+      {
+        id: 'club-1',
+        name: meta.club_name || 'Club',
+        tournaments: [
+          { id: 't-1', meta: meta, columns: (raw && raw.columns) || [], birds: (raw && raw.birds) || [], gallery: [] }
+        ]
+      }
+    ]
+  };
+}
+
+function youtubeId(url){
+  const m = String(url || '').match(/(?:youtube\.com\/(?:watch\?v=|shorts\/|embed\/)|youtu\.be\/)([A-Za-z0-9_-]{11})/);
+  return m ? m[1] : null;
+}
+function youtubeThumb(url){
+  const id = youtubeId(url);
+  return id ? `https://img.youtube.com/vi/${id}/hqdefault.jpg` : null;
+}
+function youtubeEmbed(url){
+  const id = youtubeId(url);
+  return id ? `https://www.youtube.com/embed/${id}?autoplay=1` : null;
+}
+
+let currentGalleryItems = [];
+
+function openLightboxAt(i){
+  const item = currentGalleryItems[i];
+  if(!item) return;
+  const body = document.getElementById('lightboxBody');
+  if(item.type === 'video'){
+    const embed = youtubeEmbed(item.image);
+    body.innerHTML = embed
+      ? `<iframe src="${embed}" style="width:90vw; max-width:800px; height:50vh; border:0; border-radius:10px;" allow="autoplay; encrypted-media" allowfullscreen></iframe>`
+      : `<video src="${item.image}" controls autoplay style="max-width:100%; max-height:90vh; border-radius:10px;"></video>`;
+  } else {
+    body.innerHTML = `<img src="${item.image}" alt="">`;
+  }
+  document.getElementById('lightbox').classList.add('open');
+}
+function closeLightbox(e){
+  if(e) e.stopPropagation();
+  document.getElementById('lightbox').classList.remove('open');
+  document.getElementById('lightboxBody').innerHTML = '';
+}
+
+function render(raw){
+  const data = migrateData(raw);
+  const clubId = qsParam('club');
+  const club = data.clubs.find(c => String(c.id) === String(clubId)) || data.clubs[0];
+
+  if(!club){
+    document.getElementById('app').innerHTML = '<div class="error-box">Yeh club nahi mila.</div><footer><a href="clubs.html">← Clubs</a></footer>';
+    return;
+  }
+
+  const tournaments = club.tournaments || [];
+  if(tournaments.length === 0){
+    document.getElementById('app').innerHTML = `<div class="empty-box">${escapeHtml(club.name)} ka abhi koi tournament nahi hai</div><footer><a href="clubs.html">← Clubs</a></footer>`;
+    return;
+  }
+
+  const tId = qsParam('t');
+  let tour = tournaments.find(t => String(t.id) === String(tId));
+  if(!tour) tour = tournaments[tournaments.length - 1]; // default: most recent
+
+  const gallery = tour.gallery || [];
+
+  const historyChips = tournaments.map(t => {
+    const active = String(t.id) === String(tour.id);
+    const label = t.name || (t.meta && t.meta.date) || 'Tournament';
+    return `<a class="history-chip${active ? ' active' : ''}" href="gallery.html?club=${encodeURIComponent(club.id)}&t=${encodeURIComponent(t.id)}">${escapeHtml(label)}</a>`;
+  }).join('');
+
+  currentGalleryItems = gallery;
+
+  const gridHtml = gallery.length
+    ? `<div class="gallery-grid">${gallery.map((g, i) => {
+        const isVideo = g.type === 'video';
+        const thumb = isVideo ? youtubeThumb(g.image) : g.image;
+        return `
+        <div class="gallery-item${isVideo ? ' is-video' : ''}" onclick="openLightboxAt(${i})">
+          ${thumb ? `<img src="${thumb}" alt="">` : `<div class="no-thumb">🎬</div>`}
+          ${isVideo ? `<div class="play-badge">▶️</div>` : ''}
+        </div>
+      `;
+      }).join('')}</div>`
+    : `<div class="empty-box">🖼 Is tournament ki abhi koi photo/video nahi hai</div>`;
+
+  document.getElementById('app').innerHTML = `
+    <a class="back-link" href="club.html?club=${encodeURIComponent(club.id)}&t=${encodeURIComponent(tour.id)}">← ${escapeHtml(club.name)} ka result</a>
+    <div class="page-title">🖼 Gallery</div>
+    <div class="history">${historyChips}</div>
+    <div class="infobar">
+      <div class="line1">${tour.name ? escapeHtml(tour.name) + ' · ' : ''}${escapeHtml((tour.meta && tour.meta.date) || '')} · ${escapeHtml(club.name)}</div>
+    </div>
+    ${gridHtml}
+    <footer><a href="clubs.html">Sab Clubs dekhein →</a></footer>
+  `;
+}
+
+fetch('./data.json?t=' + Date.now(), { cache: 'no-store' })
+  .then(r => { if(!r.ok) throw new Error('data.json not found'); return r.json(); })
+  .then(render)
+  .catch(err => {
+    document.getElementById('app').innerHTML =
+      '<div class="error-box">Couldn\'t load data.json — make sure it\'s uploaded in the same folder as this page. (' + err.message + ')</div>' +
+      '<footer><a href="clubs.html">← Clubs</a></footer>';
+  });
+</script>
+</body>
+</html>
