@@ -17,12 +17,12 @@
             "sunrise": "",
             "sunset": "",
             "flying": 0,
-            "landed": 18,
-            "pigeons": 18,
+            "landed": 27,
+            "pigeons": 27,
             "lofts": 3,
             "first_winner_time": "13:22",
             "first_winner_name": "Khalid sial",
-            "winner_pigeon_time": "19:12",
+            "winner_pigeon_time": "16:03",
             "winner_pigeon_name": "نیا کبوتر",
             "is_live": true,
             "daily_winners": [
@@ -38,12 +38,20 @@
                 "day": 2,
                 "first_winner_name": "",
                 "first_winner_time": "",
-                "winner_pigeon_name": "Saifi Gujjar",
-                "winner_pigeon_time": "19:55",
+                "winner_pigeon_name": "",
+                "winner_pigeon_time": "",
+                "ready": true
+              },
+              {
+                "day": 3,
+                "first_winner_name": "",
+                "first_winner_time": "",
+                "winner_pigeon_name": "Khalid sial",
+                "winner_pigeon_time": "19:01",
                 "ready": true
               }
             ],
-            "duration_days": 2
+            "duration_days": 3
           },
           "columns": [
             "#1",
@@ -51,13 +59,16 @@
             "#3",
             "#4",
             "#5",
-            "#6"
+            "#6",
+            "#7",
+            "#8",
+            "#9"
           ],
           "birds": [
             {
               "name": "Saifi Gujjar",
               "image": "",
-              "total": "Din 1: 23:09 · Din 2: 37:35",
+              "total": "Din 1: 23:09 · Din 2: 37:35 · Din 3: 22:33",
               "deduction": "",
               "note": "",
               "times": [
@@ -66,13 +77,16 @@
                 "1/12:55",
                 "2/15:59",
                 "2/16:41",
-                "2/19:55"
+                "2/19:55",
+                "3/9:55",
+                "3/12:43",
+                "3/14:55"
               ]
             },
             {
               "name": "Khalid sial",
               "image": "",
-              "total": "Din 1: 25:40 · Din 2: 26:56",
+              "total": "Din 1: 25:40 · Din 2: 26:56 · Din 3: 40:51",
               "deduction": "",
               "note": "",
               "times": [
@@ -81,13 +95,16 @@
                 "1/13:55",
                 "2/11:22",
                 "2/11:53",
-                "2/18:41"
+                "2/18:41",
+                "3/17:55",
+                "3/18:55",
+                "3/19:01"
               ]
             },
             {
               "name": "نیا کبوتر",
               "image": "",
-              "total": "Din 1: 33:19 · Din 2: 42:18",
+              "total": "Din 1: 33:19 · Din 2: 42:18 · Din 3: 31:27",
               "deduction": "",
               "note": "",
               "times": [
@@ -96,7 +113,10 @@
                 "1/18:33",
                 "2/18:55",
                 "2/19:11",
-                "2/19:12"
+                "2/19:12",
+                "3/14:22",
+                "3/16:02",
+                "3/16:03"
               ]
             }
           ],
