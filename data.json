@@ -17,22 +17,22 @@
             "sunrise": "",
             "sunset": "",
             "flying": 0,
-            "landed": 0,
-            "pigeons": 0,
-            "lofts": 0,
-            "first_winner_time": "",
-            "first_winner_name": "",
-            "winner_pigeon_time": "",
-            "winner_pigeon_name": "",
+            "landed": 9,
+            "pigeons": 9,
+            "lofts": 3,
+            "first_winner_time": "13:22",
+            "first_winner_name": "Khalid sial",
+            "winner_pigeon_time": "18:33",
+            "winner_pigeon_name": "نیا کبوتر",
             "is_live": true,
             "daily_winners": [
               {
                 "day": 1,
-                "first_winner_name": "",
-                "first_winner_time": "",
-                "winner_pigeon_name": "",
-                "winner_pigeon_time": "",
-                "ready": false
+                "first_winner_name": "Khalid sial",
+                "first_winner_time": "13:22",
+                "winner_pigeon_name": "نیا کبوتر",
+                "winner_pigeon_time": "18:33",
+                "ready": true
               },
               {
                 "day": 2,
@@ -40,7 +40,7 @@
                 "first_winner_time": "",
                 "winner_pigeon_name": "",
                 "winner_pigeon_time": "",
-                "ready": false
+                "ready": true
               }
             ],
             "duration_days": 2
@@ -50,7 +50,44 @@
             "#2",
             "#3"
           ],
-          "birds": [],
+          "birds": [
+            {
+              "name": "Saifi Gujjar",
+              "image": "",
+              "total": "23:09",
+              "deduction": "",
+              "note": "",
+              "times": [
+                "1/12:33",
+                "1/12:41",
+                "1/12:55"
+              ]
+            },
+            {
+              "name": "Khalid sial",
+              "image": "",
+              "total": "25:40",
+              "deduction": "",
+              "note": "",
+              "times": [
+                "1/13:22",
+                "1/13:23",
+                "1/13:55"
+              ]
+            },
+            {
+              "name": "نیا کبوتر",
+              "image": "",
+              "total": "33:19",
+              "deduction": "",
+              "note": "",
+              "times": [
+                "1/11:51",
+                "1/17:55",
+                "1/18:33"
+              ]
+            }
+          ],
           "columnDays": [
             1,
             1,
