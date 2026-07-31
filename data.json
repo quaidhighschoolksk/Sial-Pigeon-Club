@@ -20,15 +20,15 @@
             "landed": 27,
             "pigeons": 27,
             "lofts": 3,
-            "first_winner_time": "19:50",
-            "first_winner_name": "Khalid sial & نیا کبوتر",
-            "winner_pigeon_time": "18:55",
+            "first_winner_time": "34:07",
+            "first_winner_name": "نیا کبوتر",
+            "winner_pigeon_time": "108:12",
             "winner_pigeon_name": "نیا کبوتر",
             "is_live": true,
             "daily_winners": [
               {
                 "day": 1,
-                "first_winner_name": "Khalid sial & نیا کبوتر",
+                "first_winner_name": "نیا کبوتر",
                 "first_winner_time": "19:50",
                 "winner_pigeon_name": "نیا کبوتر",
                 "winner_pigeon_time": "19:53",
@@ -69,19 +69,44 @@
                 "day": 2,
                 "participating": 3,
                 "name": "Saifi Gujjar",
-                "time": "19:55",
+                "time": "16:41",
                 "ready": true
               },
               {
                 "day": 3,
                 "participating": 3,
                 "name": "Khalid sial",
-                "time": "19:01",
+                "time": "18:55",
                 "ready": true
               }
             ],
-            "double_mohar_time": "19:55",
-            "double_mohar_name": "Saifi Gujjar"
+            "double_mohar_time": "35:38",
+            "double_mohar_name": "نیا کبوتر",
+            "daily_baby_winner": [
+              {
+                "day": 1,
+                "participating": 3,
+                "name": "نیا کبوتر",
+                "time": "19:50",
+                "ready": true
+              },
+              {
+                "day": 2,
+                "participating": 3,
+                "name": "Khalid sial",
+                "time": "18:41",
+                "ready": true
+              },
+              {
+                "day": 3,
+                "participating": 3,
+                "name": "نیا کبوتر",
+                "time": "18:55",
+                "ready": true
+              }
+            ],
+            "baby_winner_time": "35:07",
+            "baby_winner_name": "نیا کبوتر"
           },
           "columns": [
             "#1",
@@ -102,9 +127,14 @@
               "deduction": "",
               "note": "",
               "dm_cols": [
+                1,
+                4,
+                6
+              ],
+              "baby_cols": [
                 2,
                 8,
-                5
+                3
               ],
               "times": [
                 "1/12:33",
@@ -121,16 +151,21 @@
             {
               "name": "Khalid sial",
               "image": "",
-              "total": "Din 1: 32:08 · Din 2: 26:56 · Din 3: 40:51",
+              "total": "Din 1: 25:02 · Din 2: 26:56 · Din 3: 40:51",
               "deduction": "",
               "note": "",
               "dm_cols": [
                 2,
-                8,
-                3
+                3,
+                7
+              ],
+              "baby_cols": [
+                5,
+                0,
+                6
               ],
               "times": [
-                "1/19:50",
+                "1/12:44",
                 "1/13:23",
                 "1/13:55",
                 "2/11:22",
@@ -149,8 +184,13 @@
               "note": "",
               "dm_cols": [
                 2,
-                3,
+                4,
                 6
+              ],
+              "baby_cols": [
+                0,
+                3,
+                8
               ],
               "times": [
                 "1/19:50",
