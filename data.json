@@ -17,12 +17,12 @@
             "sunrise": "",
             "sunset": "",
             "flying": 0,
-            "landed": 27,
-            "pigeons": 27,
-            "lofts": 3,
-            "first_winner_time": "34:07",
+            "landed": 60,
+            "pigeons": 60,
+            "lofts": 4,
+            "first_winner_time": "57:01",
             "first_winner_name": "نیا کبوتر",
-            "winner_pigeon_time": "108:12",
+            "winner_pigeon_time": "185:02",
             "winner_pigeon_name": "نیا کبوتر",
             "is_live": true,
             "daily_winners": [
@@ -30,16 +30,16 @@
                 "day": 1,
                 "first_winner_name": "نیا کبوتر",
                 "first_winner_time": "19:50",
-                "winner_pigeon_name": "نیا کبوتر",
-                "winner_pigeon_time": "19:53",
+                "winner_pigeon_name": "عامر کھرل",
+                "winner_pigeon_time": "19:59",
                 "ready": true
               },
               {
                 "day": 2,
-                "first_winner_name": "Saifi Gujjar & Khalid sial & نیا کبوتر",
-                "first_winner_time": "11:22",
-                "winner_pigeon_name": "Saifi Gujjar",
-                "winner_pigeon_time": "19:55",
+                "first_winner_name": "عامر کھرل",
+                "first_winner_time": "19:59",
+                "winner_pigeon_name": "عامر کھرل",
+                "winner_pigeon_time": "20:23",
                 "ready": true
               },
               {
@@ -49,63 +49,109 @@
                 "winner_pigeon_name": "Khalid sial",
                 "winner_pigeon_time": "19:01",
                 "ready": true
+              },
+              {
+                "day": 4,
+                "first_winner_name": "نیا کبوتر",
+                "first_winner_time": "13:55",
+                "winner_pigeon_name": "عامر کھرل",
+                "winner_pigeon_time": "18:50",
+                "ready": true
+              },
+              {
+                "day": 5,
+                "first_winner_name": "نیا کبوتر",
+                "first_winner_time": "18:59",
+                "winner_pigeon_name": "نیا کبوتر",
+                "winner_pigeon_time": "18:59",
+                "ready": true
               }
             ],
-            "duration_days": 3,
+            "duration_days": 5,
             "day_dates": {
               "1": "14 Aug 2026",
               "2": "18 Aug 2026",
-              "3": "25 Aug 2026"
+              "3": "25 Aug 2026",
+              "4": "27 Aug 2026",
+              "5": "28 Aug 2026"
             },
             "daily_double_mohar": [
               {
                 "day": 1,
-                "participating": 3,
-                "name": "نیا کبوتر",
-                "time": "19:53",
+                "participating": 4,
+                "name": "عامر کھرل",
+                "time": "19:59",
                 "ready": true
               },
               {
                 "day": 2,
-                "participating": 3,
-                "name": "Saifi Gujjar",
-                "time": "16:41",
+                "participating": 4,
+                "name": "عامر کھرل",
+                "time": "20:23",
                 "ready": true
               },
               {
                 "day": 3,
-                "participating": 3,
+                "participating": 4,
                 "name": "Khalid sial",
                 "time": "18:55",
                 "ready": true
+              },
+              {
+                "day": 4,
+                "participating": 4,
+                "name": "نیا کبوتر",
+                "time": "17:59",
+                "ready": true
+              },
+              {
+                "day": 5,
+                "participating": 4,
+                "name": "نیا کبوتر",
+                "time": "18:59",
+                "ready": true
               }
             ],
-            "double_mohar_time": "35:38",
+            "double_mohar_time": "62:36",
             "double_mohar_name": "نیا کبوتر",
             "daily_baby_winner": [
               {
                 "day": 1,
-                "participating": 3,
+                "participating": 4,
                 "name": "نیا کبوتر",
                 "time": "19:50",
                 "ready": true
               },
               {
                 "day": 2,
-                "participating": 3,
-                "name": "Khalid sial",
-                "time": "18:41",
+                "participating": 4,
+                "name": "عامر کھرل",
+                "time": "20:23",
                 "ready": true
               },
               {
                 "day": 3,
-                "participating": 3,
+                "participating": 4,
                 "name": "نیا کبوتر",
                 "time": "18:55",
                 "ready": true
+              },
+              {
+                "day": 4,
+                "participating": 4,
+                "name": "عامر کھرل",
+                "time": "18:50",
+                "ready": true
+              },
+              {
+                "day": 5,
+                "participating": 4,
+                "name": "نیا کبوتر",
+                "time": "18:59",
+                "ready": true
               }
             ],
-            "baby_winner_time": "35:07",
+            "baby_winner_time": "58:01",
             "baby_winner_name": "نیا کبوتر"
           },
           "columns": [
@@ -117,24 +163,34 @@
             "#6",
             "#7",
             "#8",
-            "#9"
+            "#9",
+            "#10",
+            "#11",
+            "#12",
+            "#13",
+            "#14",
+            "#15"
           ],
           "birds": [
             {
               "name": "Saifi Gujjar",
               "image": "",
-              "total": "Din 1: 23:09 · Din 2: 32:58 · Din 3: 22:33",
+              "total": "Din 1: 23:09 · Din 2: 32:58 · Din 3: 22:33 · Din 4: 31:01 · Din 5: 35:06",
               "deduction": "",
               "note": "",
               "dm_cols": [
                 1,
                 4,
-                6
+                6,
+                9,
+                13
               ],
               "baby_cols": [
                 2,
                 8,
-                3
+                3,
+                12,
+                10
               ],
               "times": [
                 "1/12:33",
@@ -145,24 +201,34 @@
                 "2/19:55",
                 "3/9:55",
                 "3/12:43",
-                "3/14:55"
+                "3/14:55",
+                "4/11:25",
+                "4/16:41",
+                "4/17:55",
+                "5/13:22",
+                "5/17:55",
+                "5/18:49"
               ]
             },
             {
               "name": "Khalid sial",
               "image": "",
-              "total": "Din 1: 25:02 · Din 2: 26:56 · Din 3: 40:51",
+              "total": "Din 1: 25:02 · Din 2: 26:56 · Din 3: 40:51 · Din 4: 29:18 · Din 5: 37:52",
               "deduction": "",
               "note": "",
               "dm_cols": [
                 2,
                 3,
-                7
+                7,
+                12,
+                9
               ],
               "baby_cols": [
                 5,
                 0,
-                6
+                6,
+                13,
+                11
               ],
               "times": [
                 "1/12:44",
@@ -173,24 +239,34 @@
                 "2/18:41",
                 "3/17:55",
                 "3/18:55",
-                "3/19:01"
+                "3/19:01",
+                "4/13:44",
+                "4/14:55",
+                "4/15:39",
+                "5/17:00",
+                "5/17:55",
+                "5/17:57"
               ]
             },
             {
               "name": "نیا کبوتر",
               "image": "",
-              "total": "Din 1: 44:34 · Din 2: 23:07 · Din 3: 40:31",
+              "total": "Din 1: 44:34 · Din 2: 23:07 · Din 3: 40:31 · Din 4: 34:53 · Din 5: 41:57",
               "deduction": "",
               "note": "",
               "dm_cols": [
                 2,
                 4,
-                6
+                6,
+                10,
+                13
               ],
               "baby_cols": [
                 0,
                 3,
-                8
+                8,
+                12,
+                9
               ],
               "times": [
                 "1/19:50",
@@ -201,7 +277,51 @@
                 "2/13:55",
                 "3/17:55",
                 "3/18:41",
-                "3/18:55"
+                "3/18:55",
+                "4/13:55",
+                "4/17:59",
+                "4/17:59",
+                "5/18:59",
+                "5/18:59",
+                "5/18:59"
+              ]
+            },
+            {
+              "name": "عامر کھرل",
+              "image": "",
+              "total": "Din 1: 28:13 · Din 2: 45:45 · Din 3: 22:29 · Din 4: 27:43 · Din 5: 32:37",
+              "deduction": "",
+              "note": "",
+              "dm_cols": [
+                2,
+                6,
+                4,
+                9,
+                14
+              ],
+              "baby_cols": [
+                7,
+                5,
+                0,
+                11,
+                12
+              ],
+              "times": [
+                "1/11:33",
+                "1/11:41",
+                "1/19:59",
+                "2/19:59",
+                "2/20:23",
+                "2/20:23",
+                "3/9:50",
+                "3/9:57",
+                "3/17:42",
+                "4/11:56",
+                "4/11:57",
+                "4/18:50",
+                "5/14:00",
+                "5/15:41",
+                "5/17:56"
               ]
             }
           ],
@@ -209,7 +329,15 @@
             1,
             1,
             1
-          ]
+          ],
+          "column_days": {
+            "9": 4,
+            "10": 4,
+            "11": 4,
+            "12": 5,
+            "13": 5,
+            "14": 5
+          }
         }
       ]
     }
