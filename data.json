@@ -69,19 +69,19 @@
                 "day": 2,
                 "participating": 3,
                 "name": "Saifi Gujjar",
-                "time": "16:41",
+                "time": "19:55",
                 "ready": true
               },
               {
                 "day": 3,
                 "participating": 3,
                 "name": "Khalid sial",
-                "time": "18:55",
+                "time": "19:01",
                 "ready": true
               }
             ],
-            "double_mohar_time": "19:53",
-            "double_mohar_name": "نیا کبوتر"
+            "double_mohar_time": "19:55",
+            "double_mohar_name": "Saifi Gujjar"
           },
           "columns": [
             "#1",
@@ -102,9 +102,9 @@
               "deduction": "",
               "note": "",
               "dm_cols": [
-                1,
-                4,
-                6
+                2,
+                8,
+                5
               ],
               "times": [
                 "1/12:33",
@@ -126,8 +126,8 @@
               "note": "",
               "dm_cols": [
                 2,
-                3,
-                7
+                8,
+                3
               ],
               "times": [
                 "1/19:50",
@@ -149,7 +149,7 @@
               "note": "",
               "dm_cols": [
                 2,
-                4,
+                3,
                 6
               ],
               "times": [
