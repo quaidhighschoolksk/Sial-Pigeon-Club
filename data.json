@@ -22,7 +22,7 @@
             "lofts": 4,
             "first_winner_time": "57:01",
             "first_winner_name": "نیا کبوتر",
-            "winner_pigeon_time": "185:02",
+            "winner_pigeon_time": "18:59",
             "winner_pigeon_name": "نیا کبوتر",
             "is_live": true,
             "daily_winners": [
@@ -152,7 +152,47 @@
               }
             ],
             "baby_winner_time": "58:01",
-            "baby_winner_name": "نیا کبوتر"
+            "baby_winner_name": "نیا کبوتر",
+            "first_winner_amount_show": true,
+            "winner_pigeon_amount_show": true,
+            "double_mohar_amount_show": true,
+            "baby_winner_amount_show": true,
+            "first_winner_amount": "",
+            "winner_pigeon_amount": "RS. 5000",
+            "double_mohar_amount": "RS. 2000",
+            "baby_winner_amount": "RS. 3000",
+            "day_amounts": {
+              "1": {
+                "fw": "RS. 5000",
+                "wp": "RS. 3000",
+                "dm": "RS. 2000",
+                "bw": "RS. 2000"
+              },
+              "2": {
+                "fw": "",
+                "wp": "",
+                "dm": "",
+                "bw": ""
+              },
+              "3": {
+                "fw": "",
+                "wp": "",
+                "dm": "",
+                "bw": ""
+              },
+              "4": {
+                "fw": "",
+                "wp": "",
+                "dm": "",
+                "bw": ""
+              },
+              "5": {
+                "fw": "",
+                "wp": "",
+                "dm": "",
+                "bw": ""
+              }
+            }
           },
           "columns": [
             "#1",
@@ -337,6 +377,9 @@
             "12": 5,
             "13": 5,
             "14": 5
+          },
+          "position_amounts_by_tab": {
+            "total": []
           }
         }
       ]
