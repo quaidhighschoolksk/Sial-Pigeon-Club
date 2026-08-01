@@ -22,7 +22,7 @@
             "lofts": 4,
             "first_winner_time": "57:01",
             "first_winner_name": "نیا کبوتر",
-            "winner_pigeon_time": "18:59",
+            "winner_pigeon_time": "109:59",
             "winner_pigeon_name": "نیا کبوتر",
             "is_live": true,
             "daily_winners": [
@@ -169,10 +169,10 @@
                 "bw": "RS. 2000"
               },
               "2": {
-                "fw": "RS. 5000",
-                "wp": "RS. 3000",
-                "dm": "RS. 2000",
-                "bw": "RS. 2000"
+                "fw": "",
+                "wp": "",
+                "dm": "",
+                "bw": ""
               },
               "3": {
                 "fw": "",
@@ -379,7 +379,22 @@
             "14": 5
           },
           "position_amounts_by_tab": {
-            "total": []
+            "1": [
+              {
+                "amount": "RS: 10,000",
+                "show": true
+              },
+              {
+                "amount": "RS: 8,000",
+                "show": true
+              }
+            ],
+            "total": [
+              {
+                "amount": "",
+                "show": true
+              }
+            ]
           }
         }
       ]
