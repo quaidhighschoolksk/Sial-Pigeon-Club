@@ -78,23 +78,23 @@
             "daily_double_mohar": [
               {
                 "day": 1,
-                "participating": 1,
-                "name": "نیا کبوتر",
-                "time": "9:00",
+                "participating": 2,
+                "name": "نیا کبوتر 2",
+                "time": "09:01",
                 "ready": true
               },
               {
                 "day": 2,
-                "participating": 1,
-                "name": "نیا کبوتر",
-                "time": "10:00",
+                "participating": 2,
+                "name": "نیا کبوتر 2",
+                "time": "10:01",
                 "ready": true
               },
               {
                 "day": 3,
-                "participating": 1,
-                "name": "نیا کبوتر",
-                "time": "12:00",
+                "participating": 2,
+                "name": "نیا کبوتر 2",
+                "time": "12:01",
                 "ready": true
               },
               {
@@ -112,29 +112,29 @@
                 "ready": false
               }
             ],
-            "double_mohar_time": "16:00",
-            "double_mohar_name": "نیا کبوتر",
+            "double_mohar_time": "16:03",
+            "double_mohar_name": "نیا کبوتر 2",
             "daily_baby_winner": [
               {
                 "day": 1,
-                "participating": 0,
-                "name": "",
-                "time": "",
-                "ready": false
+                "participating": 2,
+                "name": "نیا کبوتر 2",
+                "time": "09:01",
+                "ready": true
               },
               {
                 "day": 2,
-                "participating": 0,
-                "name": "",
-                "time": "",
-                "ready": false
+                "participating": 2,
+                "name": "نیا کبوتر 2",
+                "time": "10:01",
+                "ready": true
               },
               {
                 "day": 3,
-                "participating": 0,
-                "name": "",
-                "time": "",
-                "ready": false
+                "participating": 2,
+                "name": "نیا کبوتر 2",
+                "time": "12:01",
+                "ready": true
               },
               {
                 "day": 4,
@@ -151,8 +151,8 @@
                 "ready": false
               }
             ],
-            "baby_winner_time": "",
-            "baby_winner_name": "",
+            "baby_winner_time": "16:03",
+            "baby_winner_name": "نیا کبوتر 2",
             "first_winner_amount_show": true,
             "winner_pigeon_amount_show": true,
             "double_mohar_amount_show": true,
@@ -217,7 +217,11 @@
                 3,
                 6
               ],
-              "baby_cols": [],
+              "baby_cols": [
+                0,
+                3,
+                6
+              ],
               "times": [
                 "1/9:00",
                 "1/9:55",
@@ -236,8 +240,16 @@
               "total": "Din 1: 15:26 · Din 2: 21:44 · Din 3: 21:46",
               "deduction": "",
               "note": "",
-              "dm_cols": [],
-              "baby_cols": [],
+              "dm_cols": [
+                0,
+                3,
+                6
+              ],
+              "baby_cols": [
+                0,
+                3,
+                6
+              ],
               "times": [
                 "1/09:01",
                 "1/10:42",
