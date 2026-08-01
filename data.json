@@ -92,16 +92,16 @@
               },
               {
                 "day": 3,
-                "participating": 4,
+                "participating": 3,
                 "name": "Khalid sial",
-                "time": "18:55",
+                "time": "19:01",
                 "ready": true
               },
               {
                 "day": 4,
                 "participating": 4,
-                "name": "نیا کبوتر",
-                "time": "17:59",
+                "name": "عامر کھرل",
+                "time": "18:50",
                 "ready": true
               },
               {
@@ -112,7 +112,7 @@
                 "ready": true
               }
             ],
-            "double_mohar_time": "62:36",
+            "double_mohar_time": "64:41",
             "double_mohar_name": "نیا کبوتر",
             "daily_baby_winner": [
               {
@@ -219,11 +219,11 @@
               "deduction": "",
               "note": "",
               "dm_cols": [
-                1,
-                4,
-                6,
-                9,
-                13
+                2,
+                5,
+                8,
+                11,
+                14
               ],
               "baby_cols": [
                 2,
@@ -258,10 +258,10 @@
               "note": "",
               "dm_cols": [
                 2,
-                3,
-                7,
-                12,
-                9
+                5,
+                11,
+                8,
+                14
               ],
               "baby_cols": [
                 5,
@@ -296,10 +296,10 @@
               "note": "",
               "dm_cols": [
                 2,
-                4,
-                6,
-                10,
-                13
+                5,
+                11,
+                8,
+                14
               ],
               "baby_cols": [
                 0,
@@ -334,10 +334,9 @@
               "note": "",
               "dm_cols": [
                 2,
-                6,
-                4,
-                9,
-                14
+                14,
+                5,
+                11
               ],
               "baby_cols": [
                 7,
