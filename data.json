@@ -298,7 +298,11 @@
             ],
             "total": [
               {
-                "amount": "",
+                "amount": "RS: 5,000",
+                "show": true
+              },
+              {
+                "amount": "RS: 3,000",
                 "show": true
               }
             ]
