@@ -157,7 +157,7 @@
             "winner_pigeon_amount_show": true,
             "double_mohar_amount_show": true,
             "baby_winner_amount_show": true,
-            "first_winner_amount": "",
+            "first_winner_amount": "RS: 5000",
             "winner_pigeon_amount": "RS. 5000",
             "double_mohar_amount": "RS. 2000",
             "baby_winner_amount": "RS. 3000",
