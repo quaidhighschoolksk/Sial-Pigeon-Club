@@ -22,8 +22,8 @@
             "lofts": 2,
             "first_winner_time": "16:03",
             "first_winner_name": "نیا کبوتر 2",
-            "winner_pigeon_time": "10:22",
-            "winner_pigeon_name": "نیا کبوتر",
+            "winner_pigeon_time": "58:56",
+            "winner_pigeon_name": "نیا کبوتر 2",
             "is_live": true,
             "daily_winners": [
               {
@@ -192,7 +192,8 @@
                 "dm": "",
                 "bw": ""
               }
-            }
+            },
+            "winner_pigeon_total_ready": true
           },
           "columns": [
             "#1",
